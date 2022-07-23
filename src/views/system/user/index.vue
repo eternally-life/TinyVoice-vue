@@ -142,6 +142,10 @@
           <el-table-column label="用户昵称" align="center" key="nickName" prop="nickName" v-if="columns[2].visible" :show-overflow-tooltip="true" />
           <el-table-column label="部门" align="center" key="deptName" prop="dept.deptName" v-if="columns[3].visible" :show-overflow-tooltip="true" />
           <el-table-column label="手机号码" align="center" key="phonenumber" prop="phonenumber" v-if="columns[4].visible" width="120" />
+          <el-table-column label="邮箱" align="center" key="email" prop="email" v-if="columns[7].visible" width="120" />
+          <el-table-column label="积分" align="center" key="integral" prop="integral" v-if="columns[8].visible" width="120" />
+          <el-table-column label="学校名称" align="center" key="schoolAccount" prop="schoolAccount" v-if="columns[9].visible" width="120" />
+          <el-table-column label="学校账号" align="center" key="schoolPassword" prop="schoolPassword" v-if="columns[10].visible" width="120" />
           <el-table-column label="状态" align="center" key="status" v-if="columns[5].visible">
             <template slot-scope="scope">
               <el-switch
@@ -266,6 +270,18 @@
               </el-radio-group>
             </el-form-item>
           </el-col>
+        </el-row>
+        <el-row>
+          <el-col :span="12">
+            <el-form-item label="用户积分" prop="integral">
+              <el-input v-model="form.integral" placeholder="请输用户积分" maxlength="11" />
+            </el-form-item>
+          </el-col>
+          <!-- <el-col :span="12">
+            <el-form-item label="邮箱" prop="email">
+              <el-input v-model="form.email" placeholder="请输入邮箱" maxlength="50" />
+            </el-form-item>
+          </el-col> -->
         </el-row>
         <el-row>
           <el-col :span="12">
@@ -417,12 +433,17 @@ export default {
       // 列信息
       columns: [
         { key: 0, label: `用户编号`, visible: true },
-        { key: 1, label: `用户名称`, visible: true },
+        { key: 1, label: `用户名称`, visible: false },
         { key: 2, label: `用户昵称`, visible: true },
-        { key: 3, label: `部门`, visible: true },
+        { key: 3, label: `部门`, visible:  false },
         { key: 4, label: `手机号码`, visible: true },
         { key: 5, label: `状态`, visible: true },
-        { key: 6, label: `创建时间`, visible: true }
+        { key: 6, label: `创建时间`, visible: true },
+        { key: 7, label: `邮箱`, visible: true },
+        { key: 8, label: `积分`, visible: true },
+        { key: 9, label: `学校名称`, visible: true },
+        { key: 10, label: `学校账号`, visible: true },
+
       ],
       // 表单校验
       rules: {
@@ -581,6 +602,7 @@ export default {
         this.roleOptions = response.roles;
         this.form.postIds = response.postIds;
         this.form.roleIds = response.roleIds;
+        // this.form.integral;
         this.open = true;
         this.title = "修改用户";
         this.form.password = "";

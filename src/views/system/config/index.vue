@@ -107,7 +107,25 @@
       <el-table-column label="参数主键" align="center" prop="configId" />
       <el-table-column label="参数名称" align="center" prop="configName" :show-overflow-tooltip="true" />
       <el-table-column label="参数键名" align="center" prop="configKey" :show-overflow-tooltip="true" />
-      <el-table-column label="参数键值" align="center" prop="configValue" />
+      <el-table-column label="参数键值" align="center">
+    <template slot-scope="scope">
+              <span v-if="scope.row.configValue=='false'">
+                <el-switch
+                :value="scope.row.configValue"
+                @change="handleStatusChange(scope.row)"
+              ></el-switch>
+              </span>
+              <span v-else-if="scope.row.configValue=='true'">
+                <el-switch
+                active-value="true"
+                inactive-value="fasle"
+                :value="scope.row.configValue"
+                @change="handleStatusChange(scope.row)"
+              ></el-switch>
+              </span>
+              <span v-else>{{scope.row.configValue}}</span>
+            </template> 
+      </el-table-column>
       <el-table-column label="系统内置" align="center" prop="configType">
         <template slot-scope="scope">
           <dict-tag :options="dict.type.sys_yes_no" :value="scope.row.configType"/>
@@ -291,6 +309,7 @@ export default {
       this.reset();
       const configId = row.configId || this.ids
       getConfig(configId).then(response => {
+        // console.log(response.data);
         this.form = response.data;
         this.open = true;
         this.title = "修改参数";
@@ -303,6 +322,7 @@ export default {
           if (this.form.configId != undefined) {
             updateConfig(this.form).then(response => {
               this.$modal.msgSuccess("修改成功");
+              console.log(this.form);
               this.open = false;
               this.getList();
             });
@@ -337,6 +357,19 @@ export default {
       refreshCache().then(() => {
         this.$modal.msgSuccess("刷新成功");
       });
+    },
+     // 参数值状态修改
+    handleStatusChange(row) {
+      if (row.configValue=='false') {
+        row.configValue='true'
+      }
+      else if (row.configValue=='true') {
+        row.configValue='false'
+      }
+      updateConfig(row).then(response => {
+              this.$modal.msgSuccess("修改成功");
+              this.getList();
+          });
     }
   }
 };
