@@ -191,6 +191,8 @@
                     v-hasPermi="['system:user:resetPwd']">重置密码</el-dropdown-item>
                   <el-dropdown-item command="handleAuthRole" icon="el-icon-circle-check"
                     v-hasPermi="['system:user:edit']">分配角色</el-dropdown-item>
+                  <el-dropdown-item command="handleSendMsg" icon="el-icon-message"
+                                    v-hasPermi="['system:role:edit']">消息提醒</el-dropdown-item>
                 </el-dropdown-menu>
               </el-dropdown>
             </template>
@@ -354,6 +356,31 @@
         <el-button @click="upload.open = false">取 消</el-button>
       </div>
     </el-dialog>
+
+    <el-dialog :title="title" :visible.sync="sendMsgForm.sendMsgOpen" width="500px" append-to-body>
+      <el-form :model="sendMsgForm" label-width="80px">
+        <el-form-item label="用户ID">
+          <el-input v-model="sendMsgForm.oppositeUserId" :disabled="true" />
+        </el-form-item>
+        <el-form-item label="消息内容">
+          <editor v-model="sendMsgForm.content" :min-height="192"/>
+        </el-form-item>
+        <el-form-item label="消息类型" prop="type">
+          <el-select v-model="sendMsgForm.type" placeholder="请选择">
+            <el-option
+              v-for="dict in dict.type.sys_msg_type"
+              :key="dict.value"
+              :label="dict.label"
+              :value="dict.value">
+            </el-option>
+          </el-select>
+        </el-form-item>
+      </el-form>
+      <div slot="footer" class="dialog-footer">
+        <el-button type="primary" @click="submitSendMag">确 定</el-button>
+        <el-button @click="cancelSendMag">取 消</el-button>
+      </div>
+    </el-dialog>
   </div>
 </template>
 
@@ -363,13 +390,20 @@ import { getToken } from "@/utils/auth";
 import { treeselect } from "@/api/system/dept";
 import Treeselect from "@riophae/vue-treeselect";
 import "@riophae/vue-treeselect/dist/vue-treeselect.css";
+import {monitorSysmsgSave_Post} from "@/api/写在用户模块消息提醒通过";
 
 export default {
   name: "User",
-  dicts: ['sys_normal_disable', 'sys_user_sex'],
+  dicts: ['sys_normal_disable', 'sys_user_sex','sys_msg_type'],
   components: { Treeselect },
   data() {
     return {
+      sendMsgForm:{
+        sendMsgOpen: false,
+        content: null,
+        oppositeUserId: null,
+        type: null
+      },
       // 遮罩层
       loading: true,
       // 选中数组
@@ -575,6 +609,9 @@ export default {
         case "handleAuthRole":
           this.handleAuthRole(row);
           break;
+        case "handleSendMsg":
+          this.handleSendMsg(row);
+          break;
         default:
           break;
       }
@@ -626,6 +663,28 @@ export default {
     handleAuthRole: function(row) {
       const userId = row.userId;
       this.$router.push("/system/user-auth/role/" + userId);
+    },
+    handleSendMsg: function (row){
+      console.log(row)
+      this.sendMsgForm.oppositeUserId = row.userId;
+      this.sendMsgForm.sendMsgOpen = true;
+      this.title = '消息提醒'
+    },
+    submitSendMag(){
+      if (this.sendMsgForm.oppositeUserId != null) {
+        let monitorSysmsgSave_Body = {
+          oppositeUserId: this.sendMsgForm.oppositeUserId,   /** 接收方用户ID integer required: */
+          type: this.sendMsgForm.type,   /** 消息类型=1-官方,2-微音,3-商城,4-快递,5-个人,6-其他 integer required: */
+          content: this.sendMsgForm.content,   /** 消息内容 string required: */
+        }
+        monitorSysmsgSave_Post(monitorSysmsgSave_Body).then(response => {
+          this.$modal.msgSuccess("消息发送成功");
+          this.sendMsgForm.sendMsgOpen = false;
+        });
+      }
+    },
+    cancelSendMag(){
+      this.sendMsgForm.sendMsgOpen = false;
     },
     /** 提交按钮 */
     submitForm: function() {

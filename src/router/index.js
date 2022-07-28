@@ -161,6 +161,20 @@ export const dynamicRoutes = [
         meta: { title: '修改生成配置', activeMenu: '/tool/gen' }
       }
     ]
+  },
+  {
+    path: '/mall/orderDetail',
+    component: Layout,
+    hidden: true,
+    // permissions: ['tool:gen:edit'],
+    children: [
+      {
+        path: 'index/:tableId(\\d+)',
+        component: () => import('@/views/mall/order/orderDetail'),
+        name: 'orderDetail',
+        meta: { title: '订单详情', activeMenu: '/mall' }
+      }
+    ]
   }
 ]
 

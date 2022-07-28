@@ -4,9 +4,13 @@ import DictData from './DictData'
 export default function(dict, dictMeta) {
   const label = determineDictField(dict, dictMeta.labelField, ...DictOptions.DEFAULT_LABEL_FIELDS)
   const value = determineDictField(dict, dictMeta.valueField, ...DictOptions.DEFAULT_VALUE_FIELDS)
+  const numReg = /^[0-9]*$/;
+  const numRe = new RegExp(numReg);
+  if (numRe.test(dict[value])) {
+    return new DictData(dict[label], Number(dict[value]), dict)
+  }
   return new DictData(dict[label], dict[value], dict)
 }
-
 /**
  * 确定字典字段
  * @param {DictData} dict

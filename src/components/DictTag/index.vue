@@ -37,6 +37,9 @@ export default {
   computed: {
     values() {
       if (this.value !== null && typeof this.value !== 'undefined') {
+        if (typeof this.value === 'number'){
+          return Array.isArray(this.value) ? this.value : [Number(this.value)];
+        }
         return Array.isArray(this.value) ? this.value : [String(this.value)];
       } else {
         return [];
