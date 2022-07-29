@@ -143,8 +143,8 @@
             </template>
           </el-table-column>
           <el-table-column :filters="dict.type.tiny_mall_commodity_status"
-                           :filter-method="filterHandler"
-                           label="状态" align="center" prop="status">
+                          :filter-method="filterHandler"
+                          label="状态" align="center" prop="status">
             <template slot-scope="scope">
               <p>
                 <el-switch
@@ -157,8 +157,8 @@
             </template>
                 </el-table-column>
                 <el-table-column :filters="dict.type.tiny_mall_commodity_is_show"
-                                 :filter-method="filterHandler"
-                                 label="是否显示" align="center" prop="isShow">
+                                :filter-method="filterHandler"
+                                label="是否显示" align="center" prop="isShow">
                   <template slot-scope="scope">
                     <p>
                       <el-switch
@@ -171,8 +171,8 @@
                   </template>
                 </el-table-column>
                 <el-table-column :filters="dict.type.tiny_mall_commodity_type"
-                                 :filter-method="filterHandler"
-                                 label="商品类型" align="center" prop="type">
+                                :filter-method="filterHandler"
+                                label="商品类型" align="center" prop="type">
                   <template slot-scope="scope">
                     <dict-tag :options="dict.type.tiny_mall_commodity_type" :value="scope.row.type"/>
                   </template>
@@ -412,6 +412,7 @@ import request from "@/utils/request";
 import item from "@/layout/components/Sidebar/Item";
 import {
   monitorTinymallcommodityskuGetSku_Get,
+  monitorTinymallcommodityskuDelete_Delete,
   monitorTinymallcommodityskuSaveBatch_Post,
   monitorTinymallcommodityskuUpdate_Put
 } from "@/api/mall/商城商品规格通过";
@@ -773,6 +774,7 @@ export default {
         return this.editSkuInfo.skuList.splice(index, 1);
       }
       this.$modal.confirm('是否确认规格编号为"' + row.skuId + '"的数据项？').then(function() {
+        console.log(row.skuId);
         return monitorTinymallcommodityskuDelete_Delete([row.skuId]);
       }).then(() => {
         monitorTinymallcommodityskuGetSku_Get({commodityId: this.editSkuInfo.commodityId}).then(response => {

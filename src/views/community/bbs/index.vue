@@ -25,6 +25,16 @@
           @keyup.enter.native="handleQuery"
         />
       </el-form-item>
+      <!-- <el-form-item label="是否显示" prop="isShow">
+        <el-select v-model="queryParams.isShow"  placeholder="请选择">
+          <el-option
+            v-for="item in dict.isShow"
+            :key="item.value"
+            :label="item.label"
+            :value="item.value">
+          </el-option>
+        </el-select>
+      </el-form-item> -->
       <el-form-item label="微音类型" prop="type">
         <el-select v-model="queryParams.type"  placeholder="请选择">
           <el-option
@@ -117,20 +127,30 @@
         </template>
       </el-table-column>
       <el-table-column :filters="dict.type.tiny_bbs_type"
-                       :filter-method="filterHandler"
-                       label="微音类型" align="center" prop="type">
+                      :filter-method="filterHandler"
+                      label="微音类型" align="center" prop="type">
         <template slot-scope="scope">
           <dict-tag :options="dict.type.tiny_bbs_type" :value="scope.row.type"/>
         </template>
       </el-table-column>
       <el-table-column show-overflow-tooltip label="微音内容" align="center" prop="content" />
       <el-table-column sortable label="热度值" align="center" prop="hotNum" />
-      <el-table-column sortable label="点赞量" align="center" prop="likeNum" />
+      <el-table-column sortable label="点赞量" align="center" prop="likeNum" >
+         <template slot-scope="scope">
+          <div class="cell-input-wrap">
+             <el-input v-if="isinput" v-model.trim="scope.row.likeNum"  @blur="levelDesIt(scope.row)" ></el-input>
+             <div v-else @click="switchDesState(scope.row)">{{scope.row.likeNum}}</div>
+          <!-- <p @click="chang(scope.row)">
+           {{scope.row.likeNum}}
+          </p> -->
+          </div>
+        </template>
+      </el-table-column>
       <el-table-column sortable label="回复量" align="center" prop="replyNum" />
       <el-table-column sortable label="浏览量" align="center" prop="pageView" />
       <el-table-column :filters="dict.type.common_is_show"
-                       :filter-method="filterHandler"
-                       label="是否显示" align="center" prop="isShow">
+                      :filter-method="filterHandler"
+                      label="是否显示" align="center" prop="isShow">
         <template slot-scope="scope">
           <p>
             <el-switch
@@ -143,8 +163,8 @@
         </template>
       </el-table-column>
       <el-table-column :filters="dict.type.tiny_bbs_is_book"
-                       :filter-method="filterHandler"
-                       label="是否书籍" align="center" prop="isBook" />
+                      :filter-method="filterHandler"
+                      label="是否书籍" align="center" prop="isBook" />
       <el-table-column sortable label="价格(分)" align="center" prop="price" />
       <el-table-column label="联系方式" align="center" prop="contact" />
       <el-table-column fixed="right" label="操作" align="center" class-name="small-padding fixed-width">
@@ -206,20 +226,20 @@
               <p v-if="bbsForm.isBook === 1">价格：{{bbsForm.price}}</p>
               <p v-if="bbsForm.isBook === 1">联系方式：{{bbsForm.contact}}</p>
             </el-col>
-          </el-row>
-<!--          <el-row type="flex" class="row-bg" justify="end">-->
-<!--            <el-col :span="7">-->
-<!--              <div class="icon-btn">-->
-<!--              <i class="el-icon-view" />-->
-<!--              {{ bbsForm.hotNum }}-->
-<!--              <i class="el-icon-chat-dot-square" />-->
-<!--              {{ bbsForm.replyNum }}-->
-<!--              <i v-if="bbsForm.likeEd === true" class="iconfont el-icon-star-on " />-->
-<!--              <i v-else class="iconfont el-icon-star-off" />-->
-<!--              {{ bbsForm.likeNum }}-->
-<!--              </div>-->
-<!--            </el-col>-->
-<!--          </el-row>-->
+        </el-row>
+        <!-- <el-row type="flex" class="row-bg" justify="end">
+          <el-col :span="7">
+            <div class="icon-btn">
+            <i class="el-icon-view" />
+            {{ bbsForm.hotNum }}
+            <i class="el-icon-chat-dot-square" />
+            {{ bbsForm.replyNum }}
+            <i v-if="bbsForm.likeEd === true" class="iconfont el-icon-star-on " />
+            <i v-else class="iconfont el-icon-star-off" />
+            {{ bbsForm.likeNum }}
+            </div>
+          </el-col>
+        </el-row> -->
         </el-card>
         <el-divider v-if="bbsForm.replyList != null">回复</el-divider>
         <el-card v-for="item in bbsForm.replyList" class="box-card">
@@ -347,6 +367,8 @@ export default {
       // 是否显示弹出层
       open: false,
       typeChangShow: false,
+      //是否显示输入框
+      isinput:false,
       // 查询参数
       queryParams: {
         pageNum: 1,
@@ -354,6 +376,7 @@ export default {
         userId: null,
         keyword: null,
         targetId: null,
+        // isShow:null,
         type: null,
         sort: null,
         screenTime: null
@@ -527,6 +550,16 @@ export default {
       console.log(row)
       console.log(this.bbsForm)
       this.drawer = true
+    },
+    //点击弹出input
+    switchDesState(row){
+      this.isinput=true;
+      console.log("获取焦点"+row.likeNum);
+    },
+    //失去焦点
+    levelDesIt(row){
+      this.isinput=false;
+      console.log("失去焦点"+row.likeNum);
     }
   }
 };

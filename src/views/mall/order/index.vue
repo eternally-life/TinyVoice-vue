@@ -139,8 +139,15 @@
             @click="handleViewOrder(scope.$index, scope.row)"
             v-hasPermi="['${moduleName}:order:edit']"
           >查看订单</el-button>
-          <el-button
+          <!-- <el-button
             v-if="scope.row.status > 2"
+            size="mini"
+            type="text"
+            icon="el-icon-sell"
+            @click="handleRefund(scope.$index, scope.row)"
+            v-hasPermi="['${moduleName}:order:edit']"
+          >申请退款</el-button> -->
+              <el-button
             size="mini"
             type="text"
             icon="el-icon-sell"
@@ -428,6 +435,7 @@ export default {
     },
     /** 打开申请退款对话框 */
     handleRefund(index,row){
+      console.log(row);
       this.resetForm('refundFrom')
       this.title = '申请退款'
       this.refundFrom.orderId = row.orderId

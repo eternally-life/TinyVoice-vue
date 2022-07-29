@@ -323,6 +323,23 @@ export default {
       this.download('${moduleName}/carousel/export', {
         ...this.queryParams
       }, `carousel_${new Date().getTime()}.xlsx`)
+    },
+    // 修改是否显示
+    handleIsShowChange(index,row){
+      let monitorSyscarouselUpdate_Body={
+              carouselId: row.carouselId,  
+              name: row.name,  
+              url: row.url, 
+              content: row.content,   
+              jumpUrl: row.jumpUrl, 
+              isShow: row.isShow, 
+      }
+      monitorSyscarouselUpdate_Put(monitorSyscarouselUpdate_Body).then(response => {
+              console.log(monitorSyscarouselUpdate_Body);
+              this.$modal.msgSuccess("修改成功");
+              this.getList();
+            });
+      
     }
   }
 };
