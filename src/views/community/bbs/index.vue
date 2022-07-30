@@ -25,16 +25,14 @@
           @keyup.enter.native="handleQuery"
         />
       </el-form-item>
-      <!-- <el-form-item label="是否显示" prop="isShow">
+      <el-form-item label="是否显示" prop="isShow">
         <el-select v-model="queryParams.isShow"  placeholder="请选择">
-          <el-option
-            v-for="item in dict.isShow"
-            :key="item.value"
-            :label="item.label"
-            :value="item.value">
+          <el-option value="显示">
+          </el-option>
+            <el-option value="不显示">
           </el-option>
         </el-select>
-      </el-form-item> -->
+      </el-form-item>
       <el-form-item label="微音类型" prop="type">
         <el-select v-model="queryParams.type"  placeholder="请选择">
           <el-option
@@ -134,20 +132,41 @@
         </template>
       </el-table-column>
       <el-table-column show-overflow-tooltip label="微音内容" align="center" prop="content" />
-      <el-table-column sortable label="热度值" align="center" prop="hotNum" />
-      <el-table-column sortable label="点赞量" align="center" prop="likeNum" >
-         <template slot-scope="scope">
+      <!-- <el-table-column sortable label="热度值" align="center" prop="hotNum" /> -->
+       <el-table-column sortable label="热度值" align="center" prop="hotNum" >
+          <template slot-scope="scope">
           <div class="cell-input-wrap">
-             <el-input v-if="isinput" v-model.trim="scope.row.likeNum"  @blur="levelDesIt(scope.row)" ></el-input>
-             <div v-else @click="switchDesState(scope.row)">{{scope.row.likeNum}}</div>
-          <!-- <p @click="chang(scope.row)">
-           {{scope.row.likeNum}}
-          </p> -->
+            <el-input v-if="editdes === scope.row.bbsId+'hotNum'" v-model.lazy ="scope.row.hotNum"  @blur="levelDesIt(scope.row)" ></el-input>
+                <div v-else @click="switchDesState(scope.row,'hotNum')" class="default-span">{{scope.row.hotNum}}</div>
           </div>
         </template>
       </el-table-column>
-      <el-table-column sortable label="回复量" align="center" prop="replyNum" />
-      <el-table-column sortable label="浏览量" align="center" prop="pageView" />
+      <el-table-column sortable label="点赞量" align="center" prop="likeNum" >
+          <template slot-scope="scope">
+          <div class="cell-input-wrap">
+            <el-input v-if="editdes === scope.row.bbsId+'likeNum'" v-model.lazy ="scope.row.likeNum"  @blur="levelDesIt(scope.row)" ></el-input>
+                <div v-else @click="switchDesState(scope.row,'likeNum')" class="default-span">{{scope.row.likeNum}}</div>
+          </div>
+        </template>
+      </el-table-column>
+      <!-- <el-table-column sortable label="回复量" align="center" prop="replyNum" /> -->
+            <el-table-column sortable label="回复量" align="center" prop="replyNum" >
+          <template slot-scope="scope">
+          <div class="cell-input-wrap">
+            <el-input v-if="editdes === scope.row.bbsId+'replyNum'" v-model="scope.row.replyNum"  @blur="levelDesIt(scope.row)" ></el-input>
+                <div v-else @click="switchDesState(scope.row,'replyNum')" class="default-span">{{scope.row.replyNum}}</div>
+          </div>
+        </template>
+      </el-table-column>
+      <!-- <el-table-column sortable label="浏览量" align="center" prop="pageView" /> -->
+       <el-table-column sortable label="浏览量" align="center" prop="pageView" >
+          <template slot-scope="scope">
+          <div class="cell-input-wrap">
+            <el-input v-if="editdes === scope.row.bbsId+'pageView'" v-model="scope.row.pageView"  @blur="levelDesIt(scope.row)" ></el-input>
+                <div v-else @click="switchDesState(scope.row,'pageView')" class="default-span">{{scope.row.pageView}}</div>
+          </div>
+        </template>
+      </el-table-column>
       <el-table-column :filters="dict.type.common_is_show"
                       :filter-method="filterHandler"
                       label="是否显示" align="center" prop="isShow">
@@ -325,7 +344,8 @@ import {
   monitorTinybbsAudit_Post,
   monitorTinybbsDelete_Delete,
   monitorTinybbsPage_Get,
-  monitorTinybbsSave_Post
+  monitorTinybbsSave_Post,
+  monitorTinybbsUpdate_Post
 } from "@/api/微音论坛通过";
 
 export default {
@@ -348,6 +368,7 @@ export default {
         // imgList:[],
         //
       },
+      editdes: null, //标识处于编辑状态的单元格ref
       // 遮罩层
       loading: true,
       // 选中数组
@@ -547,19 +568,31 @@ export default {
     handleCheck(row){
       this.drawerTitle = '帖子编号：' + row.bbsId
       this.bbsForm = row
-      console.log(row)
-      console.log(this.bbsForm)
+  
       this.drawer = true
     },
     //点击弹出input
-    switchDesState(row){
+    switchDesState(row,val){
+      let a=row.bbsId+''+val;
+      this.editdes=a;
       this.isinput=true;
-      console.log("获取焦点"+row.likeNum);
+      this.inputmodel=row.likeNum;
     },
     //失去焦点
     levelDesIt(row){
       this.isinput=false;
-      console.log("失去焦点"+row.likeNum);
+      this.editdes=null;
+      let changList={
+        bbsId:row.bbsId,
+        hotNum:row.hotNum,
+        likeNum:row.likeNum,
+        replyNum:row.replyNum,
+        pageView:row.pageView,
+        isShow:row.isShow
+      }
+      monitorTinybbsUpdate_Post(changList).then(response => {
+                this.$modal.msgSuccess("修改成功");
+              });
     }
   }
 };
