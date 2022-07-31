@@ -535,7 +535,7 @@ export default {
     handleDelete(row) {
       const bbsIds = row.bbsId || this.ids;
       this.$modal.confirm('是否确认删除微音论坛编号为"' + bbsIds + '"的数据项？').then(function() {
-        return monitorTinybbsDelete_Delete([bbsIds]);
+        return monitorTinybbsDelete_Delete(bbsIds);
       }).then(() => {
         this.getList();
         this.$modal.msgSuccess("删除成功");
