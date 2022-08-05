@@ -898,25 +898,46 @@ export default {
     },
     /** 提交Sku确认 */
     submitEditSkuInfo(){
-      let addSkuList = [];
-      this.editSkuInfo.skuList.forEach(item => {
-        if (item.skuId === null && item.specification != null && item.inventory != null && item.price != null){
-          addSkuList.push({
+      Array.prototype.notempty = function() {
+        var arr = [];
+        this.map(function(item, index) {
+          if (item.skuId != null ) {
+            arr.push(item);
+          }
+        });
+        return arr;
+      }
+      if (this.preSkuList === JSON.stringify(this.editSkuInfo.skuList)) {
+        this.editSkuInfo.skuOpen = false
+      } else {
+        let arr1 = eval(this.preSkuList);
+        let arr2 = this.editSkuInfo.skuList.notempty();
+        let editSkuList = [];
+        for(let j = 0; j < arr1.length; j++) {
+          if (arr1[j].specification !== arr2[j].specification || arr1[j].inventory !== arr2[j].inventory || arr1[j].price !== arr2[j].price){
+            editSkuList.push(arr2[j]);
+          }
+        }
+        let addSkuList = [];
+        this.editSkuInfo.skuList.forEach(item => {
+          if (item.skuId === null && item.specification != null && item.inventory != null && item.price != null){
+            addSkuList.push({
               price: item.price,   /** 价格=单位分 integer required: */
               specification: item.specification,   /** 规格名 string required: */
               commodityId: this.editSkuInfo.commodityId,   /** 商品ID integer required: */
               inventory: item.inventory,   /** 库存 integer required: */
-          })}
-      });
-      if (addSkuList.length > 0){
-        this.$modal.confirm('存在'+addSkuList.length+'条新增数据未保存，是否保存？"').then(function () {
-          return monitorTinymallcommodityskuSaveBatch_Post({skuVOS: addSkuList});
-        }).then(() => {
-          this.$modal.msgSuccess("保存成功");
-        }).catch(() => {
+            })}
         });
-      }else {
-        this.editSkuInfo.skuOpen = false
+        if (addSkuList.length > 0 || editSkuList.length > 0){
+          this.$modal.confirm('存在'+addSkuList.length+'条新增数据,'+editSkuList.length+'条修改数据未保存，是否保存？"').then(function () {
+            return monitorTinymallcommodityskuSaveBatch_Post({skuVOS: addSkuList,updateSkuS: editSkuList});
+          }).then(() => {
+            this.$modal.msgSuccess("保存成功");
+          }).catch(() => {
+          });
+        }else {
+          this.editSkuInfo.skuOpen = false
+        }
       }
     },
     /** 修改商品 */
