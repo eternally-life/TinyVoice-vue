@@ -144,8 +144,8 @@
           <el-table-column label="手机号码" align="center" key="phonenumber" prop="phonenumber" v-if="columns[4].visible" width="120" />
           <el-table-column label="邮箱" align="center" key="email" prop="email" v-if="columns[7].visible" width="120" />
           <el-table-column label="积分" align="center" key="integral" prop="integral" v-if="columns[8].visible" width="120" />
-          <el-table-column label="学校名称" align="center" key="schoolAccount" prop="schoolAccount" v-if="columns[9].visible" width="120" />
-          <el-table-column label="学校账号" align="center" key="schoolPassword" prop="schoolPassword" v-if="columns[10].visible" width="120" />
+          <el-table-column label="学校名称" align="center" key="schoolName" prop="schoolName" v-if="columns[9].visible" width="120" />
+          <el-table-column label="学校账号" align="center" key="schoolAccount" prop="schoolAccount" v-if="columns[10].visible" width="120" />
           <el-table-column label="状态" align="center" key="status" v-if="columns[5].visible">
             <template slot-scope="scope">
               <el-switch
