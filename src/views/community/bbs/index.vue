@@ -121,7 +121,10 @@
       <el-table-column label="昵称" align="center" prop="nickName" />
       <el-table-column label="用户头像链接" align="center" prop="avatar">
         <template slot-scope="scope">
-          <image-preview :src="scope.row.avatar" :width="50" :height="50"/>
+          <!-- <div  @click="temp(scope.row)">  <image-preview :src="scope.row.avatar" :width="50" :height="50"/></div> -->
+          <div  @click="temp(scope.row)">  <img :src="scope.row.avatar" :width="50" :height="50"/></div>
+        
+
         </template>
       </el-table-column>
       <el-table-column :filters="dict.type.tiny_bbs_type"
@@ -131,7 +134,13 @@
           <dict-tag :options="dict.type.tiny_bbs_type" :value="scope.row.type"/>
         </template>
       </el-table-column>
-      <el-table-column show-overflow-tooltip label="微音内容" align="center" prop="content" />
+      <el-table-column show-overflow-tooltip label="微音内容" align="center" prop="content" >
+      <template slot-scope="scope">
+        <div v-text="scope.row.content">
+          <!-- {{scope.row.content}} -->
+        </div>
+      </template>
+      </el-table-column>
       <!-- <el-table-column sortable label="热度值" align="center" prop="hotNum" /> -->
        <el-table-column sortable label="热度值" align="center" prop="hotNum" >
           <template slot-scope="scope">
@@ -233,7 +242,9 @@
           </el-row>
           <el-divider><dict-tag :options="dict.type.tiny_bbs_type" :value="bbsForm.type"/></el-divider>
           <el-row>
-          <el-col :span="24">{{bbsForm.content}}</el-col>
+          <el-col v-html="bbsForm.content" :span="24">
+            <!-- {{bbsForm.content}} -->
+            </el-col>
           </el-row>
           <el-divider>附图</el-divider>
           <el-row>
@@ -246,7 +257,7 @@
               <p v-if="bbsForm.isBook === 1">联系方式：{{bbsForm.contact}}</p>
             </el-col>
         </el-row>
-        <!-- <el-row type="flex" class="row-bg" justify="end">
+        <el-row type="flex" class="row-bg" justify="end">
           <el-col :span="7">
             <div class="icon-btn">
             <i class="el-icon-view" />
@@ -258,7 +269,7 @@
             {{ bbsForm.likeNum }}
             </div>
           </el-col>
-        </el-row> -->
+        </el-row>
         </el-card>
         <el-divider v-if="bbsForm.replyList != null">回复</el-divider>
         <el-card v-for="item in bbsForm.replyList" class="box-card">
@@ -593,7 +604,11 @@ export default {
       monitorTinybbsUpdate_Post(changList).then(response => {
                 this.$modal.msgSuccess("修改成功");
               });
+    },
+    temp(row){
+      console.log(row);
     }
+
   }
 };
 </script>

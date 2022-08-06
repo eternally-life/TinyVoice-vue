@@ -33,19 +33,13 @@
         </el-row>
         <el-row>
           <el-col :span="24">
+            <editor v-if="isshow" v-model="content">
+              <!-- <button @click="addContent(content)">提交</button> -->
+              </editor>
+              <el-col  v-else v-html="content"> </el-col> 
+
             <!-- <h4>后端技术</h4> -->
-            <ul>
-              <li>玉承昌: 内向的前端程序猿，不善言谈，但擅长搞事情，明明是学的电子专业的却不务正业过来搞软件。 <br/></li>
-              <li>卫志鹏: 内向的后端程序猿，不善言谈，但擅长搞事情。上勾拳你带我一起走吧上勾拳，没有你我怎么活啊。<br/></li>
-              <li>张金波: 活泼的前端程序猿，能说会道，擅长写helloworld。<br/></li>
-              <li>王秋娜: 一个标准但不传统的潮汕美女，美术风格、交互设计、UI设计等的完善和设计<br/></li>
-              <li>颜新相: 想卷卷不动，想躺躺不平。<br/></li>
-              <li>黄传永: 一个有趣的代码搬运工。<br/></li>
-              <li>陈天乐: 干啥啥不行,摸鱼第一名<br/></li>
-              <li>吴晓强：最后也就是本人啦，一个普通的桂电学生<br/><br/></li>
-              <li>另外鸣谢:覃卓雅,黄韵声,黄琪琪，何亚楠,谭娜娜，刘越,许雯雯,林沛浩<br/><br/></li>    
-              <li>特别鸣谢:谭老师,林学长,魏学长,韦学长,表白墙，静静<br/><br/></li>
-            </ul>
+      
             
           </el-col>
           <!-- <el-col :span="6">
@@ -117,7 +111,20 @@ export default {
     return {
       // 版本号
       version: "3.5.0",
-      activeName: 'first'
+      activeName: 'first',
+      content:`<ul>
+              <li>玉承昌: 内向的前端程序猿，不善言谈，但擅长搞事情，明明是学的电子专业的却不务正业过来搞软件。 <br/></li>
+              <li>卫志鹏: 内向的后端程序猿，不善言谈，但擅长搞事情。上勾拳你带我一起走吧上勾拳，没有你我怎么活啊。<br/></li>
+              <li>张金波: 活泼的前端程序猿，能说会道，擅长写helloworld。<br/></li>
+              <li>王秋娜: 一个标准但不传统的潮汕美女，美术风格、交互设计、UI设计等的完善和设计<br/></li>
+              <li>颜新相: 想卷卷不动，想躺躺不平。<br/></li>
+              <li>黄传永: 一个有趣的代码搬运工。<br/></li>
+              <li>陈天乐: 干啥啥不行,摸鱼第一名<br/></li>
+              <li>吴晓强：最后也就是本人啦，一个普通的桂电学生<br/><br/></li>
+              <li>另外鸣谢:覃卓雅,黄韵声,黄琪琪，何亚楠,谭娜娜，刘越,许雯雯,林沛浩<br/><br/></li>    
+              <li>特别鸣谢:谭老师,林学长,魏学长,韦学长,表白墙，静静<br/></li>
+            </ul>`,
+      isshow:false
     };
   },
   methods: {
@@ -126,7 +133,11 @@ export default {
     },
     handleClick(tab, event) {
         // console.log(tab, event);
-      }
+      },
+    addContent(value){
+      this.content=value;
+      console.log(this.content);
+    }
   },
 };
 </script>
