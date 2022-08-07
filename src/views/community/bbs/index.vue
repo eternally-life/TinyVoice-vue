@@ -122,7 +122,7 @@
       <el-table-column label="用户头像链接" align="center" prop="avatar">
         <template slot-scope="scope">
           <!-- <div  @click="temp(scope.row)">  <image-preview :src="scope.row.avatar" :width="50" :height="50"/></div> -->
-          <div  @click="temp(scope.row)">  <img :src="scope.row.avatar" :width="50" :height="50"/></div>
+      <img :src="scope.row.avatar" :width="50" :height="50"/>
         
 
         </template>
@@ -319,7 +319,7 @@
         <el-form-item label="用户头像" prop="avatar">
           <image-upload v-model="form.avatar"/>
         </el-form-item>
-        <el-form-item label="点赞数量" prop="nickName">
+        <el-form-item label="点赞数量" prop="likeNum">
           <el-input v-model="form.likeNum" placeholder="请输入点赞数量" />
         </el-form-item>
         <el-form-item label="是否书籍" prop="isBook">

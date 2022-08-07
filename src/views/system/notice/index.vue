@@ -271,8 +271,10 @@ export default {
     handleUpdate(row) {
       this.reset();
       const noticeId = row.noticeId || this.ids
+      console.log(row);
       getNotice(noticeId).then(response => {
         this.form = response.data;
+        console.log(response.data);
         this.open = true;
         this.title = "修改公告";
       });
@@ -283,6 +285,7 @@ export default {
         if (valid) {
           if (this.form.noticeId != undefined) {
             updateNotice(this.form).then(response => {
+              console.log(this.form);
               this.$modal.msgSuccess("修改成功");
               this.open = false;
               this.getList();
