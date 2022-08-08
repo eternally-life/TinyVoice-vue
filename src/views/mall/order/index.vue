@@ -104,6 +104,7 @@
       <el-table-column label="地址填的姓名" align="center" prop="addrName" />
       <el-table-column label="地址填的电话" align="center" prop="addrPhone" />
       <el-table-column show-overflow-tooltip label="地址json" align="center" prop="addrJson" />
+      <!-- <el-table-column label="地址json" align="center" prop="addrJson" /> -->
       <el-table-column label="订单最后操作信息" align="center" prop="lastOperationUser" />
       <el-table-column label="商品32位流水号" align="center" prop="serialNumber" />
       <el-table-column label="微信付款订单号" align="center" prop="wxPayNumber" />
@@ -268,6 +269,7 @@ export default {
       total: 0,
       // 商店订单表格数据
       orderList: [],
+      orderList_addrsJson:[],
       // 弹出层标题
       title: "",
       // 是否显示弹出层
@@ -318,6 +320,17 @@ export default {
       this.loading = true;
       monitorTinymallorderPageOrder_Get(this.queryParams).then(response => {
         this.orderList = response.data.records;
+        for (let i = 0; i < this.orderList.length; i++) {
+          const element="ID:"+JSON.parse(this.orderList[i].addrJson).addrId
+                    +"; 姓名:"+JSON.parse(this.orderList[i].addrJson).name
+                    +"; 手机号:"+JSON.parse(this.orderList[i].addrJson).phonenumber
+                    +"; 学校名称:"+JSON.parse(this.orderList[i].addrJson).school
+                    +"; 公寓楼:"+JSON.parse(this.orderList[i].addrJson).apartment
+                    +"; 宿舍号:"+JSON.parse(this.orderList[i].addrJson).dormitoryNumber;
+          this.orderList[i].addrJson=element;
+          
+        }
+
         this.total = response.data.total;
         this.loading = false;
       });
@@ -435,7 +448,6 @@ export default {
     },
     /** 打开申请退款对话框 */
     handleRefund(index,row){
-      console.log(row);
       this.resetForm('refundFrom')
       this.title = '申请退款'
       this.refundFrom.orderId = row.orderId
