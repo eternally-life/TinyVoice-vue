@@ -3,63 +3,87 @@
     <el-row :gutter="20">
       <el-col :sm="24" :lg="12" style="padding-left: 20px">
         <h2>校园微音-开发者的念念碎（彩蛋）</h2>
+        <el-button
+          type="primary"
+          plain
+          icon="el-icon-edit"
+          size="mini"
+          @click="revise1(15)"
+        >修改</el-button>
         <el-tabs v-model="activeName" @tab-click="handleClick">
     <el-tab-pane label="碎碎念" name="first">
-      在做这个程序的时候，我曾长期处于emo状态，校园微音，当初取这个名字的意思是：一个倾听校园微小(笑)声音的小程序，寓意着大学生活，没那么多烦恼，在微音里大家发布的都是能让人微笑的内容。后来等我重构的时候，我曾想过改名字，但是大家都觉得校园微音的名字很好，最后何同学，给这个名字赋予了新的解读.“校园微音，写一个程序，记录校园里微小的声音，而这些微小的声音就是我们的大学生活”
-      <br/>开发过程中遇到了很多挫折,一度打算放弃,后来，团队的成员站出来说，再试试吧，我们再试试。再后来队伍里的队员站出来,自行做快递业务和其余线下业务，毕竟我们一直是这样靠着自己过来的呀！山重水复疑无路，柳暗花明又一村。校园微音确实更多是一个学习项目,如今已经重构到第三版了，从最初的单体小程序到微服务多平台小程序,一边学一边做.每次重构,都用了一些我们不熟悉的知识,并不是买的外包的程序，所以我想你当然可以说程序做得不好,可是你永远无法否认我们的努力。
-      <br/>因为很多时候,我们都用着大量精力写一些能照顾微小声音的功能。1. 我们推出了QQ小程序，方便看课表2. 我们怕为了让挂科重修,课程冲突的同学更好的看课表,特地写了日/月查看课表的功能3. 我们对体测成绩计算进行优化,存储数值,4. 我们做英语均分的功能，并配以说明5. 在教务系统更新时,我们课表适配比桂北汇早一个多月6.我们做微音，做帖子，做二手市场7. 完美校园自动提醒打卡校园微音一路过来,真的收到了太多大家的帮助
-      <br/>如果时间允许,我想我会把校园微音变成一个真正有趣的程序吧可是软件工程的欧老师说过,每个软件都有自己的生命周期的,校园微音我记得是我大二上开始准备的吧,如今已经大三下了,开发一年有余，也许校园微音也到谢幕的时候了。也或许,谢幕的不是校园微音,而是我们的青春~
+                  <editor v-if="isshow1" v-model="content1">
+              </editor>
+              <el-col  v-else v-html="content1"> </el-col> 
+              <el-button
+          type="primary"
+          plain
+          icon="el-icon-edit"
+          size="mini"
+          v-show="isshow1"
+          @click="submit(15)"
+        >提交</el-button>
+              <el-button 
+        size="mini"
+        v-show="isshow1"
+        @click="cancel(15)"
+        >取 消</el-button>
+              
+          </el-tab-pane>
+    <el-tab-pane label="遇到的挫折" name="second">
+<editor v-if="isshow2" v-model="content2">
+              </editor>
+              <el-col  v-else v-html="content2"> </el-col> 
+                <el-button
+          type="primary"
+          plain
+          icon="el-icon-edit"
+          size="mini"
+          v-show="isshow2"
+          @click="submit(16)"
+        >提交</el-button>
+        <el-button 
+        size="mini"
+        v-show="isshow2"
+        @click="cancel(16)"
+        >取 消</el-button>
     </el-tab-pane>
-    <el-tab-pane label="遇到的挫折" name="second">回想起来,校园微音曾经经历好多次差点就黄的情况.<br/>
-      第1次,是和学长一起写但是我写完前端后，学长由于忙于实习，实在没空，缺少后端（代码还在要就拿去）。<br/>
-      第2次,和一个兄弟一起写,后端写完后领导觉得项目实在太敏感所以做不了.<br/>
-      第3次,时过境迁，我自学了后端后，写出后端的第一个程序后，我想起了我的前任程序，燥热的心又开始跳动，我的血液开始沸腾，看来该写的程序，兜兜转转总是要写完，就想想见的人心心念念总会相见。我甚至不知道域名、IP、服务器之间有什么关系，我决定把这个项目重启。 我仍记得笨拙的做在电脑面前一行行敲代码的自己，一次次的反复调试，一次次的重启IDE不知道bug出在哪的呆滞领会； 我仍记得配置SSL证书配置了一个星期都不成功，大年初一发空间求助，最后学长远程教我才配置好的苦逼时光; 我仍记得第一次操作liunx部署程序,百度的教程写的是:wq保存，以为只是输入wq就行，没想到冒号也要输入的无限error瞬间; 我仍记得图片云储存一直失败，我发起工单和厂商从中午聊到了晚上，      最后发现是自己的密钥填错了。 
-      <br/>第4次,我甚至注册了个体工商的营业执照，总算通过了审核,又因为备案不是企业备案失败<br/>
-      第5次,备案通过后,又由于选用的技术栈问题,服务器内存不够<br/>
-      第6次,我们集资买了一个4+16G的服务器,程序总算运行起来,又被黑客攻击,被拿来挖矿,安全小白的我花了一个星期终于解决<br/>
-      第7次,程序总算运行起来,原本谈好合作的快递团队,临时不干了.这么多磨难过来至今，我们并没有挂靠任何组织，一步一步的走到今天，可是代码没有将我击败，然而人情世故的芒，刺眼又直指人心，再沸腾的血液照射过后也只剩干涸和悲凉，今日放歌纵酒，明日便可能借酒消愁。我也累了,我就要毕业了,项目集资也花完了，团队里的人来来去去，原来我留下来的不过是几行冰冷的代码，我真的累了。我第一次想在总群里宣布,校园微音项目到此谢幕，感谢大家！<br/></el-tab-pane>
   </el-tabs>
-        <!-- <p>
-         在做这个程序的时候，我曾长期处于emo状态，校园微音，当初取这个名字的意思是：一个倾听校园微小(笑)声音的小程序，寓意着大学生活，没那么多烦恼，在微音里大家发布的都是能让人微笑的内容。后来等我重构的时候，我曾想过改名字，但是大家都觉得校园微音的名字很好，最后何同学，给这个名字赋予了新的解读.“校园微音，写一个程序，记录校园里微小的声音，而这些微小的声音就是我们的大学生活”回想起来,校园微音曾经经历好多次差点就黄的情况.第1次,是和学长一起写但是我写完前端后，学长由于忙于实习，实在没空，缺少后端（代码还在要就拿去）。第2次,和一个兄弟一起写,后端写完后领导觉得项目实在太敏感所以做不了.第3次,时过境迁，我自学了后端后，写出后端的第一个程序后，我想起了我的前任程序，燥热的心又开始跳动，我的血液开始沸腾，看来该写的程序，兜兜转转总是要写完，就想想见的人心心念念总会相见。我甚至不知道域名、IP、服务器之间有什么关系，我决定把这个项目重启。 我仍记得笨拙的做在电脑面前一行行敲代码的自己，一次次的反复调试，一次次的重启IDE不知道bug出在哪的呆滞领会； 我仍记得配置SSL证书配置了一个星期都不成功，大年初一发空间求助，最后学长远程教我才配置好的苦逼时光; 我仍记得第一次操作liunx部署程序,百度的教程写的是:wq保存，以为只是输入wq就行，没想到冒号也要输入的无限error瞬间; 我仍记得图片云储存一直失败，我发起工单和厂商从中午聊到了晚上，最后发现是自己的密钥填错了。 第4次,我甚至注册了个体工商的营业执照，总算通过了审核,又因为备案不是企业备案失败第5次,备案通过后,又由于选用的技术栈问题,服务器内存不够第6次,我们集资买了一个4+16G的服务器,程序总算运行起来,又被黑客攻击,被拿来挖矿,安全小白的我花了一个星期终于解决第7次,程序总算运行起来,原本谈好合作的快递团队,临时不干了.这么多磨难过来至今，我们并没有挂靠任何组织，一步一步的走到今天，可是代码没有将我击败，然而人情世故的芒，刺眼又直指人心，再沸腾的血液照射过后也只剩干涸和悲凉，今日放歌纵酒，明日便可能借酒消愁。我也累了,我就要毕业了,项目集资也花完了，团队里的人来来去去，原来我留下来的不过是几行冰冷的代码，我真的累了。我第一次想在总群里宣布,校园微音项目到此谢幕，感谢大家！后来，团队的成员站出来说，再试试吧，我们再试试。再后来队伍里的队员站出来,自行做快递业务和其余线下业务，毕竟我们一直是这样靠着自己过来的呀！山重水复疑无路，柳暗花明又一村。校园微音确实更多是一个学习项目,如今已经重构到第三版了，从最初的单体小程序到微服务多平台小程序,一边学一边做.每次重构,都用了一些我们不熟悉的知识,并不是买的外包的程序，所以我想你当然可以说程序做得不好,可是你永远无法否认我们的努力。因为很多时候,我们都用着大量精力写一些能照顾微小声音的功能。
-        </p>
-        <p>如果时间允许,我想我会把校园微音变成一个真正有趣的程序吧可是软件工程的欧老师说过,每个软件都有自己的生命周期的,校园微音我记得是我大二上开始准备的吧,如今已经大三下了,开发一年有余，也许校园微音也到谢幕的时候了。也或许,谢幕的不是校园微音,而是我们的青春~</p> -->
       </el-col>
 
       <el-col :sm="24" :lg="12" style="padding-left: 50px">
         <el-row>
           <el-col :span="12">
             <h2>鸣谢列表</h2>
+            <el-button
+          type="primary"
+          plain
+          icon="el-icon-edit"
+          size="mini"
+          @click="revise2(17)"
+        >修改</el-button>
+
           </el-col>
         </el-row>
         <el-row>
           <el-col :span="24">
-            <!-- <h4>后端技术</h4> -->
-            <ul>
-              <li>玉承昌: 内向的前端程序猿，不善言谈，但擅长搞事情，明明是学的电子专业的却不务正业过来搞软件。 <br/></li>
-              <li>卫志鹏: 内向的后端程序猿，不善言谈，但擅长搞事情。上勾拳你带我一起走吧上勾拳，没有你我怎么活啊。<br/></li>
-              <li>张金波: 活泼的前端程序猿，能说会道，擅长写helloworld。<br/></li>
-              <li>王秋娜: 一个标准但不传统的潮汕美女，美术风格、交互设计、UI设计等的完善和设计<br/></li>
-              <li>颜新相: 想卷卷不动，想躺躺不平。<br/></li>
-              <li>黄传永: 一个有趣的代码搬运工。<br/></li>
-              <li>陈天乐: 干啥啥不行,摸鱼第一名<br/></li>
-              <li>吴晓强：最后也就是本人啦，一个普通的桂电学生<br/><br/></li>
-              <li>另外鸣谢:覃卓雅,黄韵声,黄琪琪，何亚楠,谭娜娜，刘越,许雯雯,林沛浩<br/><br/></li>    
-              <li>特别鸣谢:谭老师,林学长,魏学长,韦学长,表白墙，静静<br/><br/></li>
-            </ul>
-            
+            <editor v-if="isshow3" v-model="content3">
+              </editor>
+              <el-col  v-else v-html="content3"> </el-col> 
+              <el-button
+          type="primary"
+          plain
+          icon="el-icon-edit"
+          size="mini"
+          v-show="isshow3"
+          @click="submit(17)"
+        >提交</el-button>
+        <el-button 
+        size="mini"
+        v-show="isshow3"
+        @click="cancel(17)"
+        >取 消</el-button>
           </el-col>
-          <!-- <el-col :span="6">
-            <h4>前端技术</h4>
-            <ul>
-              <li>Vue</li>
-              <li>Vuex</li>
-              <li>Element-ui</li>
-              <li>Axios</li>
-              <li>Echarts</li>
-              <li>Quill</li>
-              <li>...</li>
-            </ul>
-          </el-col> -->
         </el-row>
       </el-col>
     </el-row>
@@ -92,41 +116,103 @@
           </div>
         </el-card>
       </el-col>
-      <!-- <el-col :xs="24" :sm="24" :md="12" :lg="8">
-        <el-card class="update-log">
-          <div slot="header" class="clearfix">
-            <span>更新日志</span>
-          </div>
-        </el-card>
-      </el-col> -->
-      <!-- <el-col :xs="24" :sm="24" :md="12" :lg="8">
-        <el-card class="update-log">
-          <div slot="header" class="clearfix">
-            <span>捐赠支持</span>
-          </div>
-        </el-card>
-      </el-col> -->
+
     </el-row>
   </div>
 </template>
 
 <script>
+import {getNotice,updateNotice } from "@/api/system/notice";
+
 export default {
   name: "Index",
   data() {
     return {
       // 版本号
       version: "3.5.0",
-      activeName: 'first'
+      activeName: 'first',
+      content1:'',
+      content2:'',
+      content3:'',
+      // 碎碎念是否展示
+      isshow1:false,
+      // 遇到的挫折是否展示
+      isshow2:false,
+      //鸣谢列表是否展示
+      isshow3:false,
+       // 表单参数
+      form: {},
     };
   },
+  created() {
+    this.gitcontent();
+  },
   methods: {
+    gitcontent(){
+      //获取念念碎的数据  15为通知公告中的序号
+      getNotice(15).then(response => {
+        this.content1 = response.data.noticeContent;
+      });
+      //获取遇到挫折的数据  16为通知公告中的序号
+      getNotice(16).then(response => {
+        this.content2 = response.data.noticeContent;
+      });
+      //获取鸣谢列表的数据  17为通知公告中的序号
+      getNotice(17).then(response => {
+        this.content3 = response.data.noticeContent;
+      });
+    },
     goTarget(href) {
       window.open(href, "_blank");
     },
     handleClick(tab, event) {
-        // console.log(tab, event);
-      }
+
+      },
+ 
+    // 念念碎修改按钮
+    revise1(val){
+
+      this.isshow1=true;
+      this.isshow2=true;
+    },
+    //鸣谢列表修改按钮
+    revise2(val){
+      this.isshow3=true;
+    },
+    // 提交按钮
+    submit(val){
+      getNotice(val).then(response => {
+        this.form=response.data;
+        if (val==15) {
+          this.form.noticeContent=this.content1;
+        }
+        if (val==16) {
+        this.form.noticeContent=this.content2;
+        }
+        if (val==17) {
+          this.form.noticeContent=this.content3;
+        }
+        updateNotice(this.form).then(response => {
+              this.$modal.msgSuccess("修改成功");
+              this.gitcontent();
+      });
+    this.isshow1=false;
+    this.isshow2=false;
+    this.isshow3=false;
+    })
+  },
+  // 取消按钮
+  cancel(val){
+    if (val==15) {
+    this.isshow1=false;
+        }
+    if (val==16) {
+    this.isshow2=false;
+        }
+    if (val==17) {
+    this.isshow3=false;
+        }
+  }
   },
 };
 </script>
