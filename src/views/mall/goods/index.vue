@@ -258,7 +258,7 @@
       </el-form>
       <div slot="footer" class="dialog-footer">
         <el-button type="primary" @click="submitCommodityAddForm">确 定</el-button>
-        <el-button @click="cancel">取 消</el-button>
+        <el-button @click="commodityFromCancel">取 消</el-button>
       </div>
     </el-dialog>
     <!--商品修改对话框-->
@@ -562,6 +562,10 @@ export default {
     cancel() {
       this.open = false;
       this.reset();
+    },
+    commodityFromCancel(){
+      this.commodityFromOpen = false;
+      this.resetForm('commodityFrom');
     },
     // 表单重置
     reset() {
