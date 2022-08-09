@@ -123,7 +123,7 @@
         <template slot-scope="scope">
           <!-- <div  @click="temp(scope.row)">  <image-preview :src="scope.row.avatar" :width="50" :height="50"/></div> -->
       <img :src="scope.row.avatar" :width="50" :height="50"/>
-        
+
 
         </template>
       </el-table-column>
@@ -358,6 +358,7 @@ import {
   monitorTinybbsSave_Post,
   monitorTinybbsUpdate_Post
 } from "@/api/微音论坛通过";
+import {monitorTinyserveUpdate_Put} from "@/api/服务管理";
 
 export default {
   name: "Bbs",
@@ -579,7 +580,7 @@ export default {
     handleCheck(row){
       this.drawerTitle = '帖子编号：' + row.bbsId
       this.bbsForm = row
-  
+
       this.drawer = true
     },
     //点击弹出input
@@ -588,6 +589,17 @@ export default {
       this.editdes=a;
       this.isinput=true;
       this.inputmodel=row.likeNum;
+    },
+    handleIsShowChange(index,row){
+      console.log('sss')
+      let monitorTinybbsUpdate_body = {
+        bbsId: row.bbsId,   /** $property.description integer required: */
+        isShow: row.isShow   /** 是否显示=1-显示,0-隐藏 integer required: */
+      }
+      monitorTinybbsUpdate_Post( monitorTinybbsUpdate_body).then( response => {
+        this.$modal.msgSuccess("修改成功")
+        this.getList();
+      })
     },
     //失去焦点
     levelDesIt(row){
