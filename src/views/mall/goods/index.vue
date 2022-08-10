@@ -217,7 +217,7 @@
     <el-dialog :title="title" :visible.sync="commodityFromOpen" width="500px">
       <el-form ref="commodityFrom" :model="commodityFrom" :rules="addRules" label-width="80px">
         <el-form-item label="学校名" prop="schoolId">
-          <el-select @change="changeSchoolId"  v-model="this.schoolId" clearable placeholder="请选择">
+          <el-select @change="changeSchoolId"  v-model="commodityFrom.schoolId" clearable placeholder="请选择">
             <el-option
               v-for="dict in dict.type.sys_common_school"
               :key="dict.value"
@@ -329,7 +329,7 @@
       <span>商品货号：</span>
       <span>{{editSkuInfo.commodityId}}</span>
       <el-input :disabled="true" placeholder="按sku编号搜索" v-model="editSkuInfo.keyword" size="small" style="width: 50%;margin-left: 20px">
-        <el-button slot="append" icon="el-icon-search" @click=""></el-button>
+        <!-- <el-button slot="append" icon="el-icon-search" @click="">123</el-button> -->
       </el-input>
       <el-button
         size="mini"
@@ -474,11 +474,12 @@ export default {
       schoolId: null,
       mallList:[],
       commodityFrom: {
+        schoolId:1,
         mallId: null,
         image: null,
         name: null,
         content: null,
-        type: null
+        type: 2
       },
       commodityEditFromOpen: false,
       commodityEditFrom: {
@@ -554,6 +555,7 @@ export default {
       this.loading = true;
       monitorTinymallPageMallCommodity_Get(this.queryParams).then(response => {
         this.commodityList = response.data.records;
+        // console.log(response.data.records);
         this.total = response.data.total;
         this.loading = false;
       });
@@ -606,6 +608,8 @@ export default {
     /** 新增按钮操作 */
     handleAdd() {
       this.resetForm('commodityFrom');
+      this.changeSchoolId();
+      // console.log(this.commodityFrom.mallId);
       this.commodityFromOpen = true;
       this.title = "添加商品"
     },
@@ -624,7 +628,7 @@ export default {
       if(row.commodityId != null){
         monitorTinymallPageMallCommodity_Param.commodityId = row.commodityId
       }
-      console.log(monitorTinymallPageMallCommodity_Param)
+      // console.log(monitorTinymallPageMallCommodity_Param)
       monitorTinymallPageMallCommodity_Get(monitorTinymallPageMallCommodity_Param).then(response => {
         this.commodityEditFrom = response.data.records[0];
         this.commodityEditFromOpen = true
@@ -695,18 +699,45 @@ export default {
       })
     },
     /** 新增商品 */
-    submitCommodityAddForm(){
+    async submitCommodityAddForm(){
       let monitorTinymallcommoditySave_Body = {
+        schoolId:this.commodityFrom.schoolId,
         image: this.commodityFrom.image,   /** 商品的图片url string required: */
         mallId: this.commodityFrom.mallId,   /** 商店id integer required: */
         name: this.commodityFrom.name,   /** 商品名 string required: */
         type: this.commodityFrom.type,   /** 商品类型=1-虚拟商品,2-实体商品 integer required: */
         content: this.commodityFrom.content,   /** 商品介绍 string required: */
       }
-      monitorTinymallcommoditySave_Post(monitorTinymallcommoditySave_Body).then(response => {
+      // monitorTinymallcommoditySave_Post(monitorTinymallcommoditySave_Body).then(response => {
+      //   this.$modal.msgSuccess("新增成功");
+      //   this.commodityFromOpen = false;
+      //   this.getList();
+      // // this.editSkuInfo.skuOpen = true;
+      // this.handleShowSkuEditDialog();
+      // }); 
+      await monitorTinymallcommoditySave_Post(monitorTinymallcommoditySave_Body)
         this.$modal.msgSuccess("新增成功");
         this.commodityFromOpen = false;
         this.getList();
+        let monitorTinymallPageMallCommodity_Param = {
+                pageNum: 1,
+                /** 第几页 string required:false */
+                pageSize: 50,
+                /** 页码大小 string required:false */
+                isShow: null,
+                /** 显示筛选 1 显示 0 不显示 string required:false */
+                status: 1,
+                /**  string required:false */
+                mallIdList: this.commodityFrom.mallId,
+                /** 根据商店ID数组筛选 string required:false */
+                name: this.commodityFrom.name,
+                /** 根据名字筛选 string required:false */
+            }
+        //(注意:有概率触发bug) 查询商品id,用搜素的接口获取到表单数据,再取数据中第一个 再调用handleShowSkuEditDialog方法
+        monitorTinymallPageMallCommodity_Get(monitorTinymallPageMallCommodity_Param).then(response => {
+        // console.log(response.data.records);
+        // console.log(response.data.records[0]);
+        this.handleShowSkuEditDialog(1,response.data.records[0])
       });
     },
     /** 添加库存新行 */
@@ -719,7 +750,7 @@ export default {
         inventory:null,
         commodityId: null
       });
-      console.log(this.editSkuInfo.skuList)
+      // console.log(this.editSkuInfo.skuList)
     },
     /** 编辑保存库存 */
     handleEditSkuConfirm(row){
@@ -778,7 +809,7 @@ export default {
         return this.editSkuInfo.skuList.splice(index, 1);
       }
       this.$modal.confirm('是否确认规格编号为"' + row.skuId + '"的数据项？').then(function() {
-        console.log(row.skuId);
+        // console.log(row.skuId);
         return monitorTinymallcommodityskuDelete_Delete([row.skuId]);
       }).then(() => {
         monitorTinymallcommodityskuGetSku_Get({commodityId: this.editSkuInfo.commodityId}).then(response => {
@@ -795,11 +826,9 @@ export default {
       let monitorTinymallcommodityskuGetSku_Param = {
         commodityId: row.commodityId,   /** 商品ID string required:false */
       }
-      console.log(monitorTinymallcommodityskuGetSku_Param)
       monitorTinymallcommodityskuGetSku_Get(monitorTinymallcommodityskuGetSku_Param).then(response => {
         this.editSkuInfo.skuList = response.data;
         this.preSkuList = JSON.stringify(this.editSkuInfo.skuList);
-        console.log(this.preSkuList)
       });
     },
     /** 删除商品  删除按钮操作 */
@@ -875,7 +904,7 @@ export default {
             editSkuList.push(arr2[j]);
           }
         }
-        console.log(editSkuList);
+        // console.log(editSkuList);
         let addSkuList = [];
         this.editSkuInfo.skuList.forEach(item => {
           if (item.skuId === null && item.specification != null && item.inventory != null && item.price != null){
@@ -891,6 +920,7 @@ export default {
             return monitorTinymallcommodityskuSaveBatch_Post({skuVOS: addSkuList,updateSkuS: editSkuList});
           }).then(() => {
             this.$modal.msgSuccess("保存成功");
+             this.editSkuInfo.skuOpen = false;
           }).catch(() => {
           });
         }else {
