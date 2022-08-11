@@ -71,24 +71,26 @@
         </template>
       </el-table-column>
       <el-table-column :filters="dict.type.tiny_serve_icon_type"
-                       :filter-method="filterHandler"
-                       label="图标类型" align="center" prop="iconType">
+                      :filter-method="filterHandler"
+                      label="图标类型" align="center" prop="iconType">
         <template slot-scope="scope">
           <dict-tag :options="dict.type.tiny_serve_icon_type" :value="scope.row.iconType"/>
         </template>
       </el-table-column>
+
       <el-table-column label="icon图标" align="center" prop="icon" />
       <el-table-column label="跳转地址" align="center" prop="jumpUrl" />
       <el-table-column :filters="dict.type.tiny_serve_jump_type"
-                       :filter-method="filterHandler"
-                       label="跳转类型" align="center" prop="jumpType">
+                      :filter-method="filterHandler"
+                      label="跳转类型" align="center" prop="jumpType">
         <template slot-scope="scope">
           <dict-tag :options="dict.type.tiny_serve_jump_type" :value="scope.row.jumpType"/>
         </template>
       </el-table-column>
+            <el-table-column label="appid" align="center" prop="appId" />
       <el-table-column :filters="dict.type.common_is_show"
-                       :filter-method="filterHandler"
-                       label="是否显示" align="center" prop="isShow">
+                      :filter-method="filterHandler"
+                      label="是否显示" align="center" prop="isShow">
         <template slot-scope="scope">
           <p>
             <el-switch
@@ -171,6 +173,9 @@
               :value="dict.value">
             </el-option>
           </el-select>
+        </el-form-item>
+        <el-form-item v-if="form.jumpType==4" label="AppId" prop="appId">
+          <el-input v-model="form.appId" placeholder="请输入appid" />
         </el-form-item>
         <el-form-item v-if="form.serveId !=null" label="是否显示" prop="isShow">
           <el-select v-model="form.isShow" clearable placeholder="请选择">
@@ -299,7 +304,6 @@ export default {
     handleUpdate(row) {
       this.reset();
       let serveId = row.serveId || this.ids
-      console.log(serveId)
       let monitorTinyserveById_Param = {
         tinyServeId: serveId,   /**  string required:false */
       }
@@ -328,7 +332,7 @@ export default {
               icon: this.form.icon,   /** icon图标 string required: */
               serveId: this.form.serveId,   /** $property.description integer required: */
               jumpUrl: this.form.jumpUrl,   /** 跳转地址 string required: */
-              isShow: this.form.isShow   /** 是否显示=1-显示,0-隐藏 integer required: */
+              isShow: this.form.isShow,   /** 是否显示=1-显示,0-隐藏 integer required: */
             }
             monitorTinyserveUpdate_Put(monitorTinyserveUpdate_Body).then(response => {
               this.$modal.msgSuccess("修改成功");
@@ -342,7 +346,8 @@ export default {
               iconType: this.form.iconType,   /** 图标类型-1icon图标,2图片图标 string required: */
               name: this.form.name,   /** 工具名 string required: */
               icon: this.form.icon,   /** icon图标 string required: */
-              jumpUrl: this.form.jumpUrl   /** 跳转地址 string required: */
+              jumpUrl: this.form.jumpUrl,   /** 跳转地址 string required: */
+              appId:this.form.appId
             }
             monitorTinyserveSave_Post(monitorTinyserveSave_Body).then(response => {
               this.$modal.msgSuccess("新增成功");
@@ -362,7 +367,6 @@ export default {
       if(row.serveId != null){
         serveIds = [row.serveId]
       }
-      console.log(serveIds)
       this.$modal.confirm('是否确认删除服务管理编号为"' + serveIds + '"的数据项？').then(function() {
         return monitorTinyserveDelete_Delete(serveIds);
       }).then(() => {
