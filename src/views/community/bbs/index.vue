@@ -546,9 +546,14 @@ export default {
     /** 删除按钮操作 */
     handleDelete(row) {
       const bbsIds = row.bbsId || this.ids;
+      let deleteBody = []
+      if (bbsIds instanceof Array){
+        deleteBody = bbsIds
+      }else {
+        deleteBody = [bbsIds]
+      }
       this.$modal.confirm('是否确认删除微音论坛编号为"' + bbsIds + '"的数据项？').then(function() {
-        // return monitorTinybbsDelete_Delete([bbsIds]);
-        return monitorTinybbsDelete_Delete(bbsIds);
+        return monitorTinybbsDelete_Delete(deleteBody);
       }).then(() => {
         this.getList();
         this.$modal.msgSuccess("删除成功");
