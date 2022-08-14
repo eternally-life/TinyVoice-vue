@@ -136,7 +136,11 @@
             </template>
           </el-table-column>
           <el-table-column label="商品名" align="center" prop="name" />
-          <el-table-column show-overflow-tooltip label="商品介绍" align="center" prop="content" />
+          <el-table-column show-overflow-tooltip label="商品介绍" align="center">
+          <template slot-scope="scope">
+            <div @click="changeCenterDialogVisible(scope.row)">{{scope.row.content}}</div>
+            </template>
+              </el-table-column>
           <el-table-column label="SKU库存" width="100" align="center">
             <template slot-scope="scope">
               <el-button type="primary" icon="el-icon-edit" @click="handleShowSkuEditDialog(scope.$index, scope.row)" circle></el-button>
@@ -400,6 +404,21 @@
         <el-button type="primary" @click="submitEditSkuInfo">确 定</el-button>
       </span>
     </el-dialog>
+
+    <!-- 商品详情提示框 -->
+        <el-dialog
+          title="商品介绍"
+          :visible.sync="centerDialogVisible"
+          width="40%"
+          center
+          >
+          <div class="goodsIntroduction" v-html="goodsIntroduction"></div>
+          <span slot="footer" class="dialog-footer">
+            <el-button @click="centerDialogVisible = false">取 消</el-button>
+            <el-button type="primary" @click="centerDialogVisible = false">确 定</el-button>
+          </span>
+
+        </el-dialog>
   </div>
 </template>
 
@@ -460,6 +479,10 @@ export default {
       title: "",
       // 是否显示弹出层
       open: false,
+      //商品介绍弹出层
+      centerDialogVisible:false,
+      //商品介绍内容
+      goodsIntroduction:'',
       // 查询参数
       queryParams: {
         pageNum: 1,
@@ -961,7 +984,17 @@ export default {
         this.queryParams.mallIdList = null
         this.handleQuery();
       }
+    },
+    changeCenterDialogVisible(row){
+      this.centerDialogVisible=true,
+      this.goodsIntroduction=row.content;
+      console.log(this.goodsIntroduction);
     }
   }
 };
 </script>
+<style>
+.goodsIntroduction p img{
+width: 45%;
+}
+</style>
