@@ -297,8 +297,14 @@ export default {
     /** 删除按钮操作 */
     handleDelete(row) {
       const replyIds = row.replyId || this.ids;
+      let deleteBody = []
+      if (replyIds instanceof Array){
+        deleteBody = replyIds
+      }else {
+        deleteBody = [replyIds]
+      }
       this.$modal.confirm('是否确认删除资源回复编号为"' + replyIds + '"的数据项？').then(function() {
-        return monitorTinyserveresourcereplyDelete_Delete([replyIds]);
+        return monitorTinyserveresourcereplyDelete_Delete(deleteBody);
       }).then(() => {
         this.getList();
         this.$modal.msgSuccess("删除成功");

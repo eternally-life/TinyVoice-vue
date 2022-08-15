@@ -122,7 +122,7 @@
       <el-table-column label="用户头像链接" align="center" prop="avatar">
         <template slot-scope="scope">
           <!-- <div  @click="temp(scope.row)">  <image-preview :src="scope.row.avatar" :width="50" :height="50"/></div> -->
-      <img :src="scope.row.avatar" :width="50" :height="50"/>
+      <img :src="scope.row.avatar" :width="50" :height="50" referrerpolicy="no-referrer"/>
 
 
         </template>

@@ -307,8 +307,14 @@ export default {
     /** 删除按钮操作 */
     handleDelete(row) {
       const carouselIds = row.carouselId || this.ids;
+      let deleteBody = []
+      if (carouselIds instanceof Array){
+        deleteBody = carouselIds
+      }else {
+        deleteBody = [carouselIds]
+      }
       this.$modal.confirm('是否确认删除轮播图编号为"' + carouselIds + '"的数据项？').then(function() {
-        return monitorSyscarouselDelete_Delete([carouselIds]);
+        return monitorSyscarouselDelete_Delete(deleteBody);
       }).then(() => {
         this.getList();
         this.$modal.msgSuccess("删除成功");
@@ -327,19 +333,19 @@ export default {
     // 修改是否显示
     handleIsShowChange(index,row){
       let monitorSyscarouselUpdate_Body={
-              carouselId: row.carouselId,  
-              name: row.name,  
-              url: row.url, 
-              content: row.content,   
-              jumpUrl: row.jumpUrl, 
-              isShow: row.isShow, 
+              carouselId: row.carouselId,
+              name: row.name,
+              url: row.url,
+              content: row.content,
+              jumpUrl: row.jumpUrl,
+              isShow: row.isShow,
       }
       monitorSyscarouselUpdate_Put(monitorSyscarouselUpdate_Body).then(response => {
               console.log(monitorSyscarouselUpdate_Body);
               this.$modal.msgSuccess("修改成功");
               this.getList();
             });
-      
+
     }
   }
 };

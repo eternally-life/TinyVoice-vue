@@ -705,7 +705,7 @@ export default {
     submitCommodityEditForm(){
       let monitorTinymallcommodityUpdate_Body = {
         heat: this.commodityEditFrom.heat,   /** 热度 integer required: */
-        image: this.commodityEditFrom.image,   /** 商品的图片url string required: */
+        image: JSON.stringify(this.commodityEditFrom.image.split(',')),   /** 商品的图片url string required: */
         mallId: this.commodityEditFrom.mallId,   /** 商店id integer required: */
         name: this.commodityEditFrom.name,   /** 商品名 string required: */
         remark: this.commodityEditFrom.remark,   /** 备注 string required: */
@@ -725,7 +725,7 @@ export default {
     async submitCommodityAddForm(){
       let monitorTinymallcommoditySave_Body = {
         schoolId:this.commodityFrom.schoolId,
-        image: this.commodityFrom.image,   /** 商品的图片url string required: */
+        image: JSON.stringify(this.commodityFrom.image.split(',')),   /** 商品的图片url string required: */
         mallId: this.commodityFrom.mallId,   /** 商店id integer required: */
         name: this.commodityFrom.name,   /** 商品名 string required: */
         type: this.commodityFrom.type,   /** 商品类型=1-虚拟商品,2-实体商品 integer required: */
