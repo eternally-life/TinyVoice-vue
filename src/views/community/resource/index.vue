@@ -292,8 +292,14 @@ export default {
     /** 删除按钮操作 */
     handleDelete(row) {
       const resourceIds = row.resourceId || this.ids;
+      let deleteBody = []
+      if (resourceIds instanceof Array){
+        deleteBody = resourceIds
+      }else {
+        deleteBody = [resourceIds]
+      }
       this.$modal.confirm('是否确认删除资源共享编号为"' + resourceIds + '"的数据项？').then(function() {
-        return monitorTinyserveresourceDelete_Delete([resourceIds]);
+        return monitorTinyserveresourceDelete_Delete(deleteBody);
       }).then(() => {
         this.getList();
         this.$modal.msgSuccess("删除成功");
