@@ -35,7 +35,8 @@ module.exports = {
         proxy: {
             // detail: https://cli.vuejs.org/config/#devserver-proxy
             [process.env.VUE_APP_BASE_API]: {
-                target: `http://106.52.58.11:12574`,
+                // target: `http://106.52.58.11:12574`,
+                target: `https://tinyvoice.glowxq.com`,
                 // target: `http://127.0.0.1:8080`,
                 changeOrigin: true,
                 pathRewrite: {
