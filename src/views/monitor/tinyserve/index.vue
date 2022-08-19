@@ -77,7 +77,7 @@
           <dict-tag :options="dict.type.tiny_serve_icon_type" :value="scope.row.iconType"/>
         </template>
       </el-table-column>
-
+      <el-table-column show-tooltip-when-overflow label="Param" align="center" prop="param" />
       <el-table-column label="icon图标" align="center" prop="icon" />
       <el-table-column label="跳转地址" align="center" prop="jumpUrl" />
       <el-table-column :filters="dict.type.tiny_serve_jump_type"
@@ -186,6 +186,9 @@
               :value="dict.value">
             </el-option>
           </el-select>
+        </el-form-item>
+        <el-form-item v-if="this.form.jumpType===3" label="param" prop="param">
+          <el-input v-model="form.param" placeholder="请输入param" />
         </el-form-item>
       </el-form>
       <div slot="footer" class="dialog-footer">
@@ -333,6 +336,7 @@ export default {
               serveId: this.form.serveId,   /** $property.description integer required: */
               jumpUrl: this.form.jumpUrl,   /** 跳转地址 string required: */
               isShow: this.form.isShow,   /** 是否显示=1-显示,0-隐藏 integer required: */
+              param: this.form.param
             }
             monitorTinyserveUpdate_Put(monitorTinyserveUpdate_Body).then(response => {
               this.$modal.msgSuccess("修改成功");
@@ -347,7 +351,8 @@ export default {
               name: this.form.name,   /** 工具名 string required: */
               icon: this.form.icon,   /** icon图标 string required: */
               jumpUrl: this.form.jumpUrl,   /** 跳转地址 string required: */
-              appId:this.form.appId
+              appId:this.form.appId,
+              param: this.form.param
             }
             monitorTinyserveSave_Post(monitorTinyserveSave_Body).then(response => {
               this.$modal.msgSuccess("新增成功");
