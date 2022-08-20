@@ -903,6 +903,11 @@ export default {
     },
     /** 二级联动 */
     changeSchoolId(data){
+      this.schoolOptions.forEach(item => {
+        if (item.dictValue === String(data)){
+          this.form.schoolName = item.dictLabel
+        }
+      })
       this.form.schoolId = data
     },
     /** 提交Sku确认 */
