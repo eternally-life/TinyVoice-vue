@@ -475,10 +475,10 @@
 <script>
 import {
   monitorTinymallDelete_Delete,
-  monitorTinymallPageMall_Get,
+  monitorTinymallPageMall_Get, monitorTinymallPageMallType_Get,
   monitorTinymallSave_Post,
   monitorTinymallUpdate_Put
-} from "@/api/mall/商城商店分类通过";
+} from '@/api/mall/商城商店分类通过'
 import {
   monitorTinymallcommodityDelete_Delete,
   monitorTinymallcommoditySave_Post,
@@ -646,14 +646,19 @@ export default {
     handleUpdate(row) {
       console.log(row)
       this.reset();
-      const schoolIds = row.schoolId || this.ids
+      const mallIds = row.mallId || this.ids
       let monitorTinymallPageMall_Param = {
         pageNum: 1,   /** 第几页 string required:false */
         pageSize: 1,   /** 页码大小 string required:false */
-        schoolId: row.schoolId,   /** 根据商店ID筛选 string required:false */
+        mallId: row.mallId,   /** 根据商店ID筛选 string required:false */
       }
-      monitorTinymallPageMall_Get(monitorTinymallPageMall_Param).then(response => {
-        console.log(response.data)
+      if (this.ids.length > 0){
+        monitorTinymallPageMall_Param.mallId = mallIds[0]
+      }
+      if(row.mallId != null){
+        monitorTinymallPageMall_Param.mallId = row.mallId
+      }
+      monitorTinymallPageMallType_Get(monitorTinymallPageMall_Param).then(response => {
         this.form = response.data.records[0];
         this.open = true;
         this.title = "修改商店信息";
