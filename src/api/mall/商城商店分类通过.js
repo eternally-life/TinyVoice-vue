@@ -1,7 +1,14 @@
 /*** glowxq glowxq@163.com  2022-07-22 15:36:57  生成模板  ***/
 import request from '@/utils/request'
 
+export function pageOrderTurnover(data) {
+  return request({
+    url: `/monitor/tinymallorder/pageOrderTurnover`,
+    method: 'get',
+    params: data
 
+  })
+}
 /***  ===========================================================================
  * path: /monitor/tinymall/delete
  * description:
@@ -14,33 +21,6 @@ export function monitorTinymallDelete_Delete(data) {
         url: `/monitor/tinymall/delete`,
         method: 'delete',
         data: data
-
-    })
-}
-/**  =========================================================================== ***/
-
-/***  ===========================================================================
- * path: /monitor/tinymall/pageMall
- * description:
- * summary: 分页获取 分类及其商品
- * tags: 商城 - 商店/分类(通过)
- */
-let monitorTinymallPageMall_Param = {
-    pageNum: null,
-    /** 第几页 string required:false */
-    pageSize: null,
-    /** 页码大小 string required:false */
-    schoolId: null,
-    /** 根据商店ID筛选 string required:false */
-    name: null,
-    /** 根据名字筛选 string required:false */
-}
-
-export function monitorTinymallPageMall_Get(monitorTinymallPageMall_Param) {
-    return request({
-        url: `/monitor/tinymall/pageMall`,
-        method: 'get',
-        params: monitorTinymallPageMall_Param
 
     })
 }

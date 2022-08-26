@@ -113,13 +113,9 @@
           <el-table-column label="商店编号" align="center" prop="mallId" />
           <el-table-column label="学校ID" align="center" prop="schoolId" />
           <el-table-column label="学校名" align="center" prop="schoolName" />
+          <el-table-column label="营业额（元）" align="center" prop="turnoverYuan" />
           <el-table-column sortable label="余额(分)" align="center" prop="balance" />
           <el-table-column label="商店名" align="center" prop="name" />
-          <el-table-column label="店铺描述" align="center" prop="content" />
-          <el-table-column label="商店图片" align="center" prop="avatar" />
-          <el-table-column label="商店地址" align="center" prop="address" />
-          <el-table-column label="手机号" align="center" prop="phonenumber" />
-          <el-table-column label="其他联系方式" align="center" prop="otherContact" />
           <el-table-column :filters="dict.type.tiny_mall_is_show"
                            :filter-method="filterHandler"
                            label="是否显示" align="center" prop="isShow">
@@ -165,6 +161,11 @@
               <dict-tag :options="dict.type.tiny_mall_send_type" :value="scope.row.sendType"/>
             </template>
           </el-table-column>
+          <el-table-column label="店铺描述" align="center" prop="content" />
+          <el-table-column label="商店图片" align="center" prop="avatar" />
+          <el-table-column label="商店地址" align="center" prop="address" />
+          <el-table-column label="手机号" align="center" prop="phonenumber" />
+          <el-table-column label="其他联系方式" align="center" prop="otherContact" />
           <el-table-column label="开始营业时间" align="center" prop="startTime" width="180">
             <template slot-scope="scope">
               <span>{{ parseTime(scope.row.startTime, '{y}-{m}-{d}') }}</span>
@@ -251,7 +252,7 @@ import {
   monitorTinymallDelete_Delete,
   monitorTinymallPageMall_Get,
   monitorTinymallPageMallType_Get,
-  monitorTinymallSave_Post, monitorTinymallUpdate_Put
+  monitorTinymallSave_Post, monitorTinymallUpdate_Put, pageOrderTurnover
 } from "@/api/mall/商城商店分类通过";
 
 export default {
@@ -321,11 +322,12 @@ export default {
     /** 查询商店/分类列表 */
     getList() {
       this.loading = true;
-      monitorTinymallPageMall_Get(this.queryParams).then(response => {
+      monitorTinymallPageMallType_Get(this.queryParams).then(response => {
         this.mallList = response.data.records;
         this.total = response.data.total;
         this.loading = false;
       });
+      pageOrderTurnover()
     },
     // 取消按钮
     cancel() {

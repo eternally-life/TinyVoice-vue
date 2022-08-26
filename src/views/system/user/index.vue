@@ -47,6 +47,15 @@
               @keyup.enter.native="handleQuery"
             />
           </el-form-item>
+          <el-form-item label="学校账号" prop="phonenumber">
+            <el-input
+              v-model="queryParams.schoolAccount"
+              placeholder="请输入学校账号"
+              clearable
+              style="width: 240px"
+              @keyup.enter.native="handleQuery"
+            />
+          </el-form-item>
           <el-form-item label="状态" prop="status">
             <el-select
               v-model="queryParams.status"
@@ -461,6 +470,7 @@ export default {
         pageSize: 10,
         userName: undefined,
         phonenumber: undefined,
+        schoolAccount: undefined,
         status: undefined,
         deptId: undefined
       },
