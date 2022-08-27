@@ -87,7 +87,7 @@
               icon="el-icon-plus"
               size="mini"
               @click="handleAdd"
-              v-hasPermi="['${moduleName}:mall:add']"
+              v-hasPermi="['mall:goods:add']"
             >新增</el-button>
           </el-col>
           <el-col :span="1.5">
@@ -98,7 +98,7 @@
               size="mini"
               :disabled="single"
               @click="handleUpdate"
-              v-hasPermi="['${moduleName}:mall:edit']"
+              v-hasPermi="['mall:goods:update']"
             >修改</el-button>
           </el-col>
           <el-col :span="1.5">
@@ -109,7 +109,7 @@
               size="mini"
               :disabled="multiple"
               @click="commodityHandleDelete"
-              v-hasPermi="['${moduleName}:mall:remove']"
+              v-hasPermi="['mall:goods:remove']"
             >删除</el-button>
           </el-col>
           <el-col :span="1.5">
@@ -119,7 +119,7 @@
               icon="el-icon-download"
               size="mini"
               @click="handleExport"
-              v-hasPermi="['${moduleName}:mall:export']"
+              v-hasPermi="['mall:goods:export']"
             >导出</el-button>
           </el-col>
           <right-toolbar :showSearch.sync="showSearch" @queryTable="getList"></right-toolbar>
@@ -143,7 +143,7 @@
               </el-table-column>
           <el-table-column label="SKU库存" width="100" align="center">
             <template slot-scope="scope">
-              <el-button type="primary" icon="el-icon-edit" @click="handleShowSkuEditDialog(scope.$index, scope.row)" circle></el-button>
+              <el-button v-hasPermi="['mall:sku:update']" type="primary" icon="el-icon-edit" @click="handleShowSkuEditDialog(scope.$index, scope.row)" circle></el-button>
             </template>
           </el-table-column>
           <el-table-column :filters="dict.type.tiny_mall_commodity_status"
@@ -196,14 +196,14 @@
                       type="text"
                       icon="el-icon-edit"
                       @click="commodityHandleUpdate(scope.row)"
-                      v-hasPermi="['${moduleName}:commodity:edit']"
+                      v-hasPermi="['mall:goods:update']"
                     >修改</el-button>
                     <el-button
                       size="mini"
                       type="text"
                       icon="el-icon-delete"
                       @click="commodityHandleDelete(scope.row)"
-                      v-hasPermi="['${moduleName}:commodity:remove']"
+                      v-hasPermi="['mall:goods:remove']"
                     >删除</el-button>
                   </template>
                 </el-table-column>
@@ -737,7 +737,7 @@ export default {
       //   this.getList();
       // // this.editSkuInfo.skuOpen = true;
       // this.handleShowSkuEditDialog();
-      // }); 
+      // });
       await monitorTinymallcommoditySave_Post(monitorTinymallcommoditySave_Body)
         this.$modal.msgSuccess("新增成功");
         this.commodityFromOpen = false;

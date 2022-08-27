@@ -75,7 +75,7 @@
           icon="el-icon-plus"
           size="mini"
           @click="handleAdd"
-          v-hasPermi="['${moduleName}:bbs:add']"
+          v-hasPermi="['community:bbs:add']"
         >新增</el-button>
       </el-col>
       <el-col :span="1.5">
@@ -86,7 +86,7 @@
           size="mini"
           :disabled="single"
           @click="handleUpdate"
-          v-hasPermi="['${moduleName}:bbs:edit']"
+          v-hasPermi="['community:bbs:update']"
         >修改</el-button>
       </el-col>
       <el-col :span="1.5">
@@ -97,7 +97,7 @@
           size="mini"
           :disabled="multiple"
           @click="handleDelete"
-          v-hasPermi="['${moduleName}:bbs:remove']"
+          v-hasPermi="['community:bbs:remove']"
         >删除</el-button>
       </el-col>
       <el-col :span="1.5">
@@ -107,7 +107,7 @@
           icon="el-icon-download"
           size="mini"
           @click="handleExport"
-          v-hasPermi="['${moduleName}:bbs:export']"
+          v-hasPermi="['community:bbs:export']"
         >导出</el-button>
       </el-col>
       <right-toolbar :showSearch.sync="showSearch" @queryTable="getList"></right-toolbar>
@@ -202,21 +202,20 @@
             type="text"
             icon="el-icon-zoom-in"
             @click="handleCheck(scope.row)"
-            v-hasPermi="['${moduleName}:bbs:edit']"
           >查看帖子</el-button>
           <el-button
             size="mini"
             type="text"
             icon="el-icon-edit"
             @click="handleUpdate(scope.row)"
-            v-hasPermi="['${moduleName}:bbs:edit']"
+            v-hasPermi="['community:bbs:update']"
           >审核</el-button>
           <el-button
             size="mini"
             type="text"
             icon="el-icon-delete"
             @click="handleDelete(scope.row)"
-            v-hasPermi="['${moduleName}:bbs:remove']"
+            v-hasPermi="['community:bbs:remove']"
           >删除</el-button>
         </template>
       </el-table-column>

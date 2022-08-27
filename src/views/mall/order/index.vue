@@ -86,7 +86,7 @@
               icon="el-icon-plus"
               size="mini"
               @click="handleAdd"
-              v-hasPermi="['${moduleName}:order:add']"
+              v-hasPermi="['mall:order:add']"
             >新增</el-button>
           </el-col>
           <el-col :span="1.5">
@@ -97,7 +97,7 @@
               size="mini"
               :disabled="single"
               @click="handleUpdate"
-              v-hasPermi="['${moduleName}:order:edit']"
+              v-hasPermi="['mall:order:update']"
             >修改</el-button>
           </el-col>
           <el-col :span="1.5">
@@ -108,7 +108,7 @@
               size="mini"
               :disabled="multiple"
               @click="handleDelete"
-              v-hasPermi="['${moduleName}:order:remove']"
+              v-hasPermi="['mall:order:remove']"
             >删除</el-button>
           </el-col>
           <el-col :span="1.5">
@@ -118,7 +118,7 @@
               icon="el-icon-download"
               size="mini"
               @click="handleExport"
-              v-hasPermi="['${moduleName}:order:export']"
+              v-hasPermi="['mall:order:export']"
             >导出</el-button>
           </el-col>
           <right-toolbar :showSearch.sync="showSearch" @queryTable="getList"></right-toolbar>
@@ -167,7 +167,7 @@
                 type="text"
                 icon="el-icon-zoom-in"
                 @click="handleViewOrder(scope.$index, scope.row)"
-                v-hasPermi="['${moduleName}:order:edit']"
+                v-hasPermi="['mall:order:view']"
               >查看订单</el-button>
               <!-- <el-button
                 v-if="scope.row.status > 2"
@@ -182,21 +182,21 @@
                 type="text"
                 icon="el-icon-sell"
                 @click="handleRefund(scope.$index, scope.row)"
-                v-hasPermi="['${moduleName}:order:edit']"
+                v-hasPermi="['mall:order:refund']"
               >申请退款</el-button>
               <el-button
                 size="mini"
                 type="text"
                 icon="el-icon-edit"
                 @click="handleUpdate(scope.row)"
-                v-hasPermi="['${moduleName}:order:edit']"
+                v-hasPermi="['mall:order:update']"
               >修改</el-button>
               <el-button
                 size="mini"
                 type="text"
                 icon="el-icon-delete"
                 @click="handleDelete(scope.row)"
-                v-hasPermi="['${moduleName}:order:remove']"
+                v-hasPermi="['mall:order:remove']"
               >删除</el-button>
             </template>
           </el-table-column>

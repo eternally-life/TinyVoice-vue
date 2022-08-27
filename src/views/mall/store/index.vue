@@ -56,6 +56,19 @@
               </el-option>
             </el-select>
           </el-form-item>
+          <el-form-item label-width="110px" label="营业额筛选时间">
+            <el-date-picker
+              v-model="filterTime"
+              type="datetimerange"
+              :picker-options="pickerOptions"
+              range-separator="至"
+              value-format="timestamp"
+              @change="dateChange"
+              start-placeholder="开始日期"
+              end-placeholder="结束日期"
+              align="right">
+            </el-date-picker>
+          </el-form-item>
           <el-form-item>
             <el-button type="primary" icon="el-icon-search" size="mini" @click="handleQuery">搜索</el-button>
             <el-button icon="el-icon-refresh" size="mini" @click="resetQuery">重置</el-button>
@@ -70,7 +83,7 @@
               icon="el-icon-plus"
               size="mini"
               @click="handleAdd"
-              v-hasPermi="['${moduleName}:mall:add']"
+              v-hasPermi="['mall:store:add']"
             >新增</el-button>
           </el-col>
           <el-col :span="1.5">
@@ -81,7 +94,7 @@
               size="mini"
               :disabled="single"
               @click="handleUpdate"
-              v-hasPermi="['${moduleName}:mall:edit']"
+              v-hasPermi="['mall:store:update']"
             >修改</el-button>
           </el-col>
           <el-col :span="1.5">
@@ -92,7 +105,7 @@
               size="mini"
               :disabled="multiple"
               @click="handleDelete"
-              v-hasPermi="['${moduleName}:mall:remove']"
+              v-hasPermi="['mall:store:remove']"
             >删除</el-button>
           </el-col>
           <el-col :span="1.5">
@@ -102,7 +115,7 @@
               icon="el-icon-download"
               size="mini"
               @click="handleExport"
-              v-hasPermi="['${moduleName}:mall:export']"
+              v-hasPermi="['mall:store:export']"
             >导出</el-button>
           </el-col>
           <right-toolbar :showSearch.sync="showSearch" @queryTable="getList"></right-toolbar>
@@ -113,7 +126,7 @@
           <el-table-column label="商店编号" align="center" prop="mallId" />
           <el-table-column label="学校ID" align="center" prop="schoolId" />
           <el-table-column label="学校名" align="center" prop="schoolName" />
-          <el-table-column label="营业额（元）" align="center" prop="turnoverYuan" />
+          <el-table-column sortable label="营业额（元）" align="center" prop="turnoverYuan" />
           <el-table-column sortable label="余额(分)" align="center" prop="balance" />
           <el-table-column label="商店名" align="center" prop="name" />
           <el-table-column :filters="dict.type.tiny_mall_is_show"
@@ -183,14 +196,14 @@
                 type="text"
                 icon="el-icon-edit"
                 @click="handleUpdate(scope.row)"
-                v-hasPermi="['${moduleName}:mall:edit']"
+                v-hasPermi="['mall:store:update']"
               >修改</el-button>
               <el-button
                 size="mini"
                 type="text"
                 icon="el-icon-delete"
                 @click="handleDelete(scope.row)"
-                v-hasPermi="['${moduleName}:mall:remove']"
+                v-hasPermi="['mall:store:remove']"
               >删除</el-button>
             </template>
           </el-table-column>
@@ -261,6 +274,34 @@ export default {
     'tiny_mall_sort','tiny_mall_send_type','sys_common_school'],
   data() {
     return {
+      filterTime:'',
+      pickerOptions: {
+        shortcuts: [{
+          text: '最近一周',
+          onClick(picker) {
+            const end = new Date();
+            const start = new Date();
+            start.setTime(start.getTime() - 3600 * 1000 * 24 * 7);
+            picker.$emit('pick', [start, end]);
+          }
+        }, {
+          text: '最近一个月',
+          onClick(picker) {
+            const end = new Date();
+            const start = new Date();
+            start.setTime(start.getTime() - 3600 * 1000 * 24 * 30);
+            picker.$emit('pick', [start, end]);
+          }
+        }, {
+          text: '最近三个月',
+          onClick(picker) {
+            const end = new Date();
+            const start = new Date();
+            start.setTime(start.getTime() - 3600 * 1000 * 24 * 90);
+            picker.$emit('pick', [start, end]);
+          }
+        }]
+      },
       schoolName: undefined,
       schoolOptions: undefined,
       defaultProps: {
@@ -289,6 +330,8 @@ export default {
       queryParams: {
         pageNum: 1,
         pageSize: 10,
+        startTime: null,
+        endTime: null,
         schoolId: null,
         name: null,
         isShow: null
@@ -327,7 +370,6 @@ export default {
         this.total = response.data.total;
         this.loading = false;
       });
-      pageOrderTurnover()
     },
     // 取消按钮
     cancel() {
@@ -501,6 +543,12 @@ export default {
         }
       })
       this.form.schoolId = data
+    },
+    dateChange(data){
+      console.log(data)
+      console.log(this.filterTime)
+      this.queryParams.startTime = this.filterTime[0]
+      this.queryParams.endTime = this.filterTime[1]
     }
   }
 };

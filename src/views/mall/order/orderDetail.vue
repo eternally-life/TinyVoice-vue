@@ -16,9 +16,9 @@
         <i class="el-icon-warning color-danger" style="margin-left: 20px"></i>
         <span class="color-danger">当前订单状态：{{order.statusValue}}</span>
         <div class="operate-button-container">
-          <el-button v-if="order.status > 2" size="mini" @click="handleRefund(order)">申请退款</el-button>
-          <el-button size="mini" @click="handleUpdate(order)">修改订单</el-button>
-          <el-button size="mini" type="danger" @click="handleDelete(order)">删除订单</el-button>
+          <el-button v-hasPermi="['mall:order:refund']" v-if="order.status > 2" size="mini" @click="handleRefund(order)">申请退款</el-button>
+          <el-button v-hasPermi="['mall:order:update']" size="mini" @click="handleUpdate(order)">修改订单</el-button>
+          <el-button v-hasPermi="['mall:order:remove']" size="mini" type="danger" @click="handleDelete(order)">删除订单</el-button>
         </div>
       </div>
       <div style="margin-top: 20px">
