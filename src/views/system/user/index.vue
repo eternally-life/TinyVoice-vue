@@ -173,6 +173,7 @@
           <el-table-column
             label="操作"
             align="center"
+            fixed="right"
             width="160"
             class-name="small-padding fixed-width"
           >
@@ -285,7 +286,12 @@
         <el-row>
           <el-col :span="12">
             <el-form-item label="用户积分" prop="integral">
-              <el-input v-model="form.integral" placeholder="请输用户积分" maxlength="11" />
+              <el-input v-model="form.integral" placeholder="请输入用户积分" maxlength="11" />
+            </el-form-item>
+          </el-col>
+          <el-col :span="12">
+            <el-form-item label="学生账号" prop="schoolAccount">
+              <el-input v-model="form.schoolAccount" placeholder="请输入学生账号" maxlength="11" />
             </el-form-item>
           </el-col>
           <!-- <el-col :span="12">
@@ -585,6 +591,7 @@ export default {
         nickName: undefined,
         password: undefined,
         phonenumber: undefined,
+        schoolAccount: undefined,
         email: undefined,
         sex: undefined,
         status: "0",
