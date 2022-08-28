@@ -23,7 +23,7 @@
           icon="el-icon-plus"
           size="mini"
           @click="handleAdd"
-          v-hasPermi="['${moduleName}:tabbar:add']"
+          v-hasPermi="['community:tabbar:add']"
         >新增</el-button>
       </el-col>
       <el-col :span="1.5">
@@ -34,7 +34,7 @@
           size="mini"
           :disabled="single"
           @click="handleUpdate"
-          v-hasPermi="['${moduleName}:tabbar:edit']"
+          v-hasPermi="['community:tabbar:update']"
         >修改</el-button>
       </el-col>
       <el-col :span="1.5">
@@ -45,7 +45,7 @@
           size="mini"
           :disabled="multiple"
           @click="handleDelete"
-          v-hasPermi="['${moduleName}:tabbar:remove']"
+          v-hasPermi="['community:tabbar:remove']"
         >删除</el-button>
       </el-col>
       <el-col :span="1.5">
@@ -55,7 +55,7 @@
           icon="el-icon-download"
           size="mini"
           @click="handleExport"
-          v-hasPermi="['${moduleName}:tabbar:export']"
+          v-hasPermi="['community:tabbar:export']"
         >导出</el-button>
       </el-col>
       <right-toolbar :showSearch.sync="showSearch" @queryTable="getList"></right-toolbar>
@@ -70,11 +70,39 @@
       <el-table-column label="选择时icon" align="center" prop="checkedIcon" />
       <el-table-column :filters="dict.type.common_is_isShow"
                        :filter-method="filterHandler"
+                       label="微信是否显示" align="center" prop="wxShow">
+        <template slot-scope="scope">
+          <p>
+            <el-switch
+              @change="handleIsShowChange('wxShow', scope.row)"
+              :active-value="1"
+              :inactive-value="0"
+              v-model="scope.row.wxShow">
+            </el-switch>
+          </p>
+        </template>
+      </el-table-column>
+      <el-table-column :filters="dict.type.common_is_isShow"
+                       :filter-method="filterHandler"
+                       label="QQ是否显示" align="center" prop="qqShow">
+        <template slot-scope="scope">
+          <p>
+            <el-switch
+              @change="handleIsShowChange('qqShow', scope.row)"
+              :active-value="1"
+              :inactive-value="0"
+              v-model="scope.row.qqShow">
+            </el-switch>
+          </p>
+        </template>
+      </el-table-column>
+      <el-table-column :filters="dict.type.common_is_isShow"
+                       :filter-method="filterHandler"
                        label="是否显示" align="center" prop="isShow">
         <template slot-scope="scope">
           <p>
             <el-switch
-              @change="handleMallStatusChange(scope.$index, scope.row)"
+              @change="handleIsShowChange('isShow', scope.row)"
               :active-value="1"
               :inactive-value="0"
               v-model="scope.row.isShow">
@@ -82,6 +110,7 @@
           </p>
         </template>
       </el-table-column>
+      <el-table-column label="备注" align="center" prop="remark" />
       <el-table-column label="操作" align="center" class-name="small-padding fixed-width">
         <template slot-scope="scope">
           <el-button
@@ -89,14 +118,14 @@
             type="text"
             icon="el-icon-edit"
             @click="handleUpdate(scope.row)"
-            v-hasPermi="['${moduleName}:tabbar:edit']"
+            v-hasPermi="['community:tabbar:update']"
           >修改</el-button>
           <el-button
             size="mini"
             type="text"
             icon="el-icon-delete"
             @click="handleDelete(scope.row)"
-            v-hasPermi="['${moduleName}:tabbar:remove']"
+            v-hasPermi="['community:tabbar:remove']"
           >删除</el-button>
         </template>
       </el-table-column>
@@ -128,6 +157,26 @@
         <el-form-item label="选择时Icon" prop="checkedIcon">
           <el-input v-model="form.checkedIcon" placeholder="请输入选择的icon" />
         </el-form-item>
+        <el-form-item label="QQ是否显示" prop="isShow">
+          <el-select v-model="form.qqShow"  placeholder="请选择">
+            <el-option
+              v-for="item in dict.type.common_is_show"
+              :key="item.value"
+              :label="item.label"
+              :value="item.value">
+            </el-option>
+          </el-select>
+        </el-form-item>
+        <el-form-item label="微信是否显示" prop="isShow">
+          <el-select v-model="form.wxShow"  placeholder="请选择">
+            <el-option
+              v-for="item in dict.type.common_is_show"
+              :key="item.value"
+              :label="item.label"
+              :value="item.value">
+            </el-option>
+          </el-select>
+        </el-form-item>
         <el-form-item label="是否显示" prop="isShow">
           <el-select v-model="form.isShow"  placeholder="请选择">
             <el-option
@@ -137,6 +186,9 @@
               :value="item.value">
             </el-option>
           </el-select>
+        </el-form-item>
+        <el-form-item label="备注" prop="remark">
+          <el-input v-model="form.remark" placeholder="请输入备注" />
         </el-form-item>
       </el-form>
       <div slot="footer" class="dialog-footer">
@@ -220,7 +272,10 @@ export default {
         unCheckedIcon: null,
         checkedIcon: null,
         isShow: null,
-        createTime: null
+        qqShow: null,
+        wxShow:null,
+        createTime: null,
+        remark: null
       };
       this.resetForm("form");
     },
@@ -283,6 +338,9 @@ export default {
               name: this.form.name,   /** 名字 string required: */
               id: this.form.id,   /** $property.description integer required: */
               isShow: this.form.isShow,   /** 1显示,0隐藏 integer required: */
+              qqShow: this.form.qqShow,
+              wxShow: this.form.wxShow,
+              remark: this.form.remark
             }
             tinytabbarUpdate_Put(this.form).then(response => {
               this.$modal.msgSuccess("修改成功");
@@ -299,6 +357,9 @@ export default {
               name: this.form.name,   /** 名字 string required: */
               id: this.form.id,   /** $property.description integer required: */
               isShow: this.form.isShow,   /** 1显示,0隐藏 integer required: */
+              qqShow: this.form.qqShow,
+              wxShow: this.form.wxShow,
+              remark: this.form.remark
             }
             tinytabbarSave_Post(this.form).then(response => {
               this.$modal.msgSuccess("新增成功");
@@ -335,7 +396,24 @@ export default {
     filterHandler(value, row, column) {
       const property = column['property'];
       return row[property] === value;
+    },
+    handleIsShowChange(item,row){
+      let tinytabbarUpdate_Body = {
+        id: row.id,   /** $property.description integer required: */
+      }
+      if (item === 'isShow'){
+        tinytabbarUpdate_Body.isShow = row.isShow
+      }else if (item === 'qqShow'){
+        tinytabbarUpdate_Body.qqShow = row.qqShow
+      }else if (item === 'wxShow'){
+        tinytabbarUpdate_Body.wxShow = row.wxShow
+      }
+      tinytabbarUpdate_Put(tinytabbarUpdate_Body).then(response => {
+        this.$modal.msgSuccess("修改成功");
+        this.getList();
+      });
     }
   }
 };
 </script>
+
