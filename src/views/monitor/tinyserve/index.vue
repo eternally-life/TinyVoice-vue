@@ -152,7 +152,7 @@
         <el-form-item label="工具名" prop="name">
           <el-input v-model="form.name" placeholder="请输入工具名" />
         </el-form-item>
-        <el-form-item label="图片图标">
+        <el-form-item label="图片图标" prop="image">
           <image-upload v-model="form.image"/>
         </el-form-item>
         <el-form-item label="图标类型" prop="iconType">
@@ -292,7 +292,8 @@ export default {
         jumpType: null,
         isShow: null,
         createTime: null,
-        tagName:null
+        tagName:null,
+        tagId:null
       };
       this.resetForm("form");
     },
