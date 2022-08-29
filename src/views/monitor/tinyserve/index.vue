@@ -87,7 +87,15 @@
           <dict-tag :options="dict.type.tiny_serve_jump_type" :value="scope.row.jumpType"/>
         </template>
       </el-table-column>
-            <el-table-column label="appid" align="center" prop="appId" />
+      <el-table-column label="appid" align="center" prop="appId" />
+      <el-table-column label="标签名" align="center" prop="tagName" />
+            <!-- <el-table-column :filters="dict.type.tiny_serve_tag_type"
+                      :filter-method="filterHandler"
+                      label="标签名" align="center" prop="tagId">
+        <template slot-scope="scope" >
+            <dict-tag :options="dict.type.tiny_serve_tag_type" :value="scope.row.tagId"/>
+        </template>
+      </el-table-column> -->
       <el-table-column :filters="dict.type.common_is_show"
                       :filter-method="filterHandler"
                       label="是否显示" align="center" prop="isShow">
@@ -190,6 +198,16 @@
         <el-form-item v-if="this.form.jumpType===3" label="param" prop="param">
           <el-input v-model="form.param" placeholder="请输入param" />
         </el-form-item>
+        <el-form-item label="标签名称" prop="tagId">
+          <el-select v-model="form.tagId" clearable placeholder="请选择">
+            <el-option
+              v-for="dict in dict.type.tiny_serve_tag_type"
+              :key="dict.value"
+              :label="dict.label"
+              :value="dict.value">
+            </el-option>
+          </el-select>
+        </el-form-item>
       </el-form>
       <div slot="footer" class="dialog-footer">
         <el-button type="primary" @click="submitForm">确 定</el-button>
@@ -210,7 +228,7 @@ import {
 
 export default {
   name: "Serve",
-  dicts: ['common_is_show','tiny_serve_jump_type','tiny_serve_icon_type'],
+  dicts: ['common_is_show','tiny_serve_jump_type','tiny_serve_icon_type','tiny_serve_tag_type'],
   data() {
     return {
       // 遮罩层
@@ -273,7 +291,8 @@ export default {
         jumpUrl: null,
         jumpType: null,
         isShow: null,
-        createTime: null
+        createTime: null,
+        tagName:null
       };
       this.resetForm("form");
     },
@@ -326,6 +345,11 @@ export default {
     submitForm() {
       this.$refs["form"].validate(valid => {
         if (valid) {
+          for (let i = 0; i < this.dict.type.tiny_serve_tag_type.length; i++) {
+              if (this.dict.type.tiny_serve_tag_type[i].value==this.form.tagId) {
+                this.form.tagName=this.dict.type.tiny_serve_tag_type[i].label;
+              }
+            }
           if (this.form.serveId != null) {
             let monitorTinyserveUpdate_Body = {
               jumpType: this.form.jumpType,   /** 跳转类型=1-普通页面,2-tabbar页面,3-网页,4-小程序 integer required: */
@@ -336,7 +360,10 @@ export default {
               serveId: this.form.serveId,   /** $property.description integer required: */
               jumpUrl: this.form.jumpUrl,   /** 跳转地址 string required: */
               isShow: this.form.isShow,   /** 是否显示=1-显示,0-隐藏 integer required: */
-              param: this.form.param
+              appId:this.form.appId,  
+              param: this.form.param,
+              tagId:this.form.tagId,
+              tagName:this.form.tagName
             }
             monitorTinyserveUpdate_Put(monitorTinyserveUpdate_Body).then(response => {
               this.$modal.msgSuccess("修改成功");
@@ -344,6 +371,11 @@ export default {
               this.getList();
             });
           } else {
+            for (let i = 0; i < this.dict.type.tiny_serve_tag_type.length; i++) {
+              if (this.dict.type.tiny_serve_tag_type[i].value==this.form.tagId) {
+                this.form.tagName=this.dict.type.tiny_serve_tag_type[i].text;
+              }
+            }
             let monitorTinyserveSave_Body = {
               jumpType: this.form.jumpType,   /** 跳转类型=1-普通页面,2-tabbar页面,3-网页,4-小程序 integer required: */
               image: this.form.image,   /** 图片图标 string required: */
@@ -352,7 +384,9 @@ export default {
               icon: this.form.icon,   /** icon图标 string required: */
               jumpUrl: this.form.jumpUrl,   /** 跳转地址 string required: */
               appId:this.form.appId,
-              param: this.form.param
+              param: this.form.param,
+              tagId:this.form.tagId,
+              tagName:this.form.tagName
             }
             monitorTinyserveSave_Post(monitorTinyserveSave_Body).then(response => {
               this.$modal.msgSuccess("新增成功");
@@ -398,6 +432,10 @@ export default {
         this.$modal.msgSuccess("修改成功")
         this.getList();
       })
+    },
+
+    temp(a){
+      console.log(a);
     }
   }
 };
