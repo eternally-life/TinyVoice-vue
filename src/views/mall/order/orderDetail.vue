@@ -91,9 +91,9 @@
             <p>{{scope.row.commodityName}}</p>
           </template>
         </el-table-column>
-        <el-table-column label="单价(分)" width="120" align="center">
+        <el-table-column label="单价(元)" width="120" align="center">
           <template slot-scope="scope">
-            <p>{{scope.row.unitPrice}}</p>
+            <p>{{scope.row.unitPrice/100}}</p>
           </template>
         </el-table-column>
         <el-table-column label="规格" width="120" align="center">
@@ -107,14 +107,14 @@
             {{scope.row.quantity}}
           </template>
         </el-table-column>
-        <el-table-column label="总计(分)" width="120" align="center">
+        <el-table-column label="总计(元)" width="120" align="center">
           <template slot-scope="scope">
-            <span>{{scope.row.totalPrice}}</span>
+            <span>{{scope.row.totalPrice/100}}</span>
           </template>
         </el-table-column>
       </el-table>
       <div style="float: right;margin: 20px">
-        合计：<span style="color: red">{{order.totalPrice}}(分)</span>
+        合计：<span style="color: red">{{order.totalPrice}}(元)</span>
       </div>
       <div style="margin-top: 20px">
         <svg-icon icon-class="job" style="color: #606266"></svg-icon>
@@ -133,7 +133,7 @@
 
     <!-- 添加或修改商店订单对话框 -->
     <el-dialog :title="title" :visible.sync="open" width="500px" append-to-body>
-      <el-form ref="form" :model="form" :rules="rules" label-width="80px">
+      <el-form ref="form" :model="form"  label-width="80px">
         <el-form-item label="订单ID" prop="orderId">
           <el-input :disabled=true v-model="form.orderId" placeholder="请输入订单ID" />
         </el-form-item>
@@ -158,13 +158,13 @@
     </el-dialog>
 
     <el-dialog :title="title" :visible.sync="refundFrom.refundFromOpen" width="500px">
-      <el-form ref="refundFrom" :model="refundFrom" :rules="rules" label-width="80px">
+      <el-form ref="refundFrom" :model="refundFrom"  label-width="80px">
         <el-form-item label="订单id" prop="orderId">
           <el-input v-model="refundFrom.orderId" :disabled="true" placeholder="请输入订单id" />
         </el-form-item>
         <el-form-item label="订单金额" prop="orderId">
           <el-input v-model="refundFrom.totalPrice" :disabled="true">
-            <template slot="append">(分)</template>
+            <template slot="append">(元)</template>
           </el-input>
         </el-form-item>
         <el-form-item label="退款金额" prop="refund">
@@ -232,6 +232,7 @@ export default {
     }
   },
   created() {
+    console.log(this.orderDataList);
     this.order = this.$route.query.order
   },
   methods: {

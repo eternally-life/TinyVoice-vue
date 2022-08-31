@@ -127,7 +127,11 @@
           <el-table-column label="学校ID" align="center" prop="schoolId" />
           <el-table-column label="学校名" align="center" prop="schoolName" />
           <el-table-column sortable label="营业额（元）" align="center" prop="turnoverYuan" />
-          <el-table-column sortable label="余额(分)" align="center" prop="balance" />
+          <el-table-column sortable label="余额(元)" align="center" prop="balance" >
+            <template slot-scope="scope">
+              {{scope.row.balance/100}}
+            </template>
+            </el-table-column>
           <el-table-column label="商店名" align="center" prop="name" />
           <el-table-column :filters="dict.type.tiny_mall_is_show"
                            :filter-method="filterHandler"

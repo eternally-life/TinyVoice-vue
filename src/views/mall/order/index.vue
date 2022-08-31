@@ -138,7 +138,7 @@
           <el-table-column label="商品32位流水号" align="center" prop="serialNumber" />
           <el-table-column label="微信付款订单号" align="center" prop="wxPayNumber" />
           <el-table-column label="四位取货码" align="center" prop="commodityNumber" />
-          <el-table-column label="总价(分)" align="center" prop="totalPrice" />
+          <el-table-column label="总价(元)" align="center" prop="totalPrice" />
           <el-table-column label="联系方式" align="center" prop="phonenumber" />
           <el-table-column :filters="dict.type.tiny_mall_order_status"
                            :filter-method="filterHandler"
@@ -245,7 +245,7 @@
         </el-form-item>
         <el-form-item label="订单金额" prop="orderId">
           <el-input v-model="refundFrom.totalPrice" :disabled="true">
-            <template slot="append">(分)</template>
+            <template slot="append">(元)</template>
           </el-input>
         </el-form-item>
         <el-form-item label="退款金额" prop="refund">
@@ -352,7 +352,7 @@ export default {
           { required: true, message: "商品32位流水号不能为空", trigger: "blur" }
         ],
         totalPrice: [
-          { required: true, message: "总价-单位分不能为空", trigger: "blur" }
+          { required: true, message: "总价-单位元不能为空", trigger: "blur" }
         ],
       }
     };
@@ -368,6 +368,9 @@ export default {
       monitorTinymallorderPageOrder_Get(this.queryParams).then(response => {
         this.orderList = response.data.records;
         for (let i = 0; i < this.orderList.length; i++) {
+          //将价格单位分转换为元
+          this.orderList[i].totalPrice=response.data.records[i].totalPrice / 100
+          // 地址json转换
           const element="ID:"+JSON.parse(this.orderList[i].addrJson).addrId
                     +"; 姓名:"+JSON.parse(this.orderList[i].addrJson).name
                     +"; 手机号:"+JSON.parse(this.orderList[i].addrJson).phonenumber
@@ -375,7 +378,7 @@ export default {
                     +"; 公寓楼:"+JSON.parse(this.orderList[i].addrJson).apartment
                     +"; 宿舍号:"+JSON.parse(this.orderList[i].addrJson).dormitoryNumber;
           this.orderList[i].addrJson=element;
-
+          
         }
 
         this.total = response.data.total;
@@ -503,6 +506,7 @@ export default {
     },
     /** 跳转订单详情 */
     handleViewOrder(index, row){
+      // console.log(row);
       this.$router.push({path:'/mall/orderDetail',query:{order:row}})
     },
     /** 查询学校下拉树结构 */
